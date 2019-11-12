@@ -12,7 +12,7 @@ class ContactPage extends StatelessWidget {
         child: Form(
           child: Column(
             children: <Widget>[
-              TextFormField(
+              TextField(
                 style: TextStyle(
                                       fontFamily: "WorkSansSemiBold",
                                       fontSize: 16.0,
