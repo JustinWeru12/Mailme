@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "60761941589",
+    "firebase_url": "https://mailman-3e739.firebaseio.com",
+    "project_id": "mailman-3e739",
+    "storage_bucket": "mailman-3e739.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60761941589:android:0a7435267f758a37ed56dc",
+        "android_client_info": {
+          "package_name": "com.orion.mailman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60761941589-0lrlqh7u4te8mo8v6qdvbisp0r2bg5bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBy--2Z4lFqZRDkyYOC3YWHjkJrpQMH97Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60761941589-0lrlqh7u4te8mo8v6qdvbisp0r2bg5bu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
