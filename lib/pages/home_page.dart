@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage>
                   controller: _tabController,
                   children: [
                     showLetterList(),
-                    ContactPage(),
+                    LetterPage(),
                     ProfilePage(),
                     HelpPage(),
                   ],
