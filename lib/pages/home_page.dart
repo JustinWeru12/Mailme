@@ -5,10 +5,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:mailman/models/letter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
-import 'package:mailman/pages/datepicker.dart';
+// import 'package:mailman/pages/datepicker.dart';
 import 'package:mailman/pages/help.dart';
 import 'package:mailman/pages/profile.dart';
-import 'package:mailman/pages/contact.dart';
+import 'package:mailman/pages/letter.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.userId, this.logoutCallback})
@@ -360,12 +360,17 @@ class _HomePageState extends State<HomePage>
                     ),
                   ),
                   actions: <Widget>[
-                    new FlatButton(
+                    new RaisedButton(
+                      elevation: 5.0,
+            shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(5.0)),
+            color: Colors.blue,
                         child: new Text('Logout',
                             style: new TextStyle(
-                                fontSize: 25.0,
-                                color: Colors.blue,
-                                backgroundColor: Colors.amber)),
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                // backgroundColor: Colors.blue
+                                )),
                         onPressed: signOut)
                   ],
                   bottom: TabBar(

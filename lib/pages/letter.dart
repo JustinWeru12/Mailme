@@ -4,12 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:mailman/style/theme.dart' as Theme;
 
-class ProfilePage extends StatefulWidget {
+class LetterPage extends StatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _LetterPageState createState() => _LetterPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _LetterPageState extends State<LetterPage> {
   String trackingNo;
 
   String sentDate;
@@ -43,11 +43,12 @@ class _ProfilePageState extends State<ProfilePage> {
       child: SingleChildScrollView(
         child: new Card(
           elevation: 5.0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Container(
-            padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+            padding: EdgeInsets.only(left: 20.0, right: 10.0),
             decoration: BoxDecoration(
-               borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(20.0),
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
@@ -67,11 +68,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 25.0,
                   ),
                   Text(
-                    "Create a Profile",
+                    "Add a New Letter",
                     style: TextStyle(
                         fontSize: 30.0, fontFamily: 'WorkSansSemiBold'),
                   ),
-                  SizedBox(height: 25.0),
+                  SizedBox(
+                    height: 25.0,
+                  ),
                   TextField(
                     style: TextStyle(
                         fontFamily: "WorkSansSemiBold",
@@ -79,11 +82,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.black),
                     autofocus: false,
                     decoration: new InputDecoration(
-                      labelText: 'Full Names.',
+                      labelText: 'Tracking No.',
                       hintStyle: TextStyle(
                           fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                       icon: new Icon(
-                        FontAwesomeIcons.user,
+                        FontAwesomeIcons.truck,
                         color: Colors.grey,
                       ),
                       border: new OutlineInputBorder(
@@ -102,34 +105,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.black),
                     autofocus: false,
                     decoration: new InputDecoration(
-                      labelText: 'Email.',
+                      labelText: 'Description.',
                       hintStyle: TextStyle(
                           fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                       icon: new Icon(
-                        FontAwesomeIcons.at,
-                        color: Colors.grey,
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  TextField(
-                    style: TextStyle(
-                        fontFamily: "WorkSansSemiBold",
-                        fontSize: 16.0,
-                        color: Colors.black),
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      labelText: 'Age.',
-                      hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                      icon: new Icon(
-                        FontAwesomeIcons.githubAlt,
+                        FontAwesomeIcons.comment,
                         color: Colors.grey,
                       ),
                       border: new OutlineInputBorder(
@@ -145,8 +125,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding:
                           EdgeInsets.only(left: 45.0, right: 10.0, top: 0.0),
                       child: DropDownFormField(
-                        titleText: 'Select Gender',
-                        hintText: 'Please Select a Gender',
+                        titleText: 'Select Status',
+                        hintText: 'Please choose one',
                         value: _myActivity,
                         onSaved: (value) {
                           setState(() {
@@ -160,70 +140,25 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         dataSource: [
                           {
-                            "display": "Female",
-                            "value": "Female",
+                            "display": "Posted",
+                            "value": "Posted",
                           },
                           {
-                            "display": "Male",
-                            "value": "Male",
+                            "display": "Sent",
+                            "value": "Sent",
                           },
                           {
-                            "display": "Other",
-                            "value": "Other",
+                            "display": "Received",
+                            "value": "Received",
+                          },
+                          {
+                            "display": "Confirmed",
+                            "value": "Confirmed",
                           },
                         ],
                         textField: 'display',
                         valueField: 'value',
                       )),
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  TextField(
-                    style: TextStyle(
-                        fontFamily: "WorkSansSemiBold",
-                        fontSize: 16.0,
-                        color: Colors.black),
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      labelText: 'Address.',
-                      hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                      icon: new Icon(
-                        FontAwesomeIcons.envelopeOpen,
-                        color: Colors.grey,
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  TextField(
-                    style: TextStyle(
-                        fontFamily: "WorkSansSemiBold",
-                        fontSize: 16.0,
-                        color: Colors.black),
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      labelText: 'Postal Code.',
-                      hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                      icon: new Icon(
-                        FontAwesomeIcons.addressBook,
-                        color: Colors.grey,
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
                   RaisedButton(
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(

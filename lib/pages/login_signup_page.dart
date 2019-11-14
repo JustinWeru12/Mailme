@@ -93,28 +93,34 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          backgroundColor: Colors.deepOrangeAccent,
-          title: Center(
-            child: new Text('Mailman'),
-          ),
-          textTheme: TextTheme(
-            title: TextStyle(
-              fontFamily: "WorkSans-Bold",
-              fontWeight: prefix0.FontWeight.bold,
-              color: Colors.blue,
-              fontSize: 40.0,
-            ),
+      backgroundColor: Theme.Colors.loginGradientStart,
+      appBar: new AppBar(
+        backgroundColor: Colors.deepOrangeAccent,
+        title: Center(
+          child: new Text('Mailman'),
+        ),
+        textTheme: TextTheme(
+          title: TextStyle(
+            fontFamily: "WorkSans-Bold",
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+            fontSize: 40.0,
           ),
         ),
-        body: Stack(
-          alignment: Alignment(0.0, 0.0),
-          overflow: Overflow.visible,
-          children: <Widget>[
-            _showForm(),
-            _showCircularProgress(),
-          ],
-        ));
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Stack(
+            alignment: Alignment(0.0, 0.0),
+            overflow: Overflow.visible,
+            children: <Widget>[
+              _showForm(),
+              _showCircularProgress(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _showCircularProgress() {
@@ -151,65 +157,44 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 //  }
 
   Widget _showForm() {
-    return new Container(
-      padding: EdgeInsets.all(16.0),
-      alignment: Alignment(0.0, 0.0),
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
+    return new Card(
+      elevation: 5.0,
+      // color: Colors.blue[50],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
             colors: [
               Theme.Colors.loginGradientStart,
               Theme.Colors.loginGradientEnd
             ],
-            begin: const FractionalOffset(0.0, 0.0),
-            end: const FractionalOffset(1.0, 1.0),
-            stops: [0.0, 1.0],
-            tileMode: TileMode.clamp),
-      ),
-      child: Column(
-        children: <Widget>[
-        SizedBox(height: 108),
-          Stack(
-            alignment: Alignment(0.0, 0.0),
-            overflow: Overflow.visible,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.center,
-                child: Card(
-                  elevation: 5.0,
-                  color: Colors.blue[50],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Container(
-                    alignment: Alignment(0.0, 0.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          child: new Form(
-                            key: _formKey,
-                            child: new ListView(
-                              shrinkWrap: true,
-                              children: <Widget>[
-                                showLogo(),
-                                showEmailInput(),
-                                showPasswordInput(),
-                                showPrimaryButton(),
-                                showSecondaryButton(),
-                                showErrorMessage(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
           ),
-        ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Form(
+              key: _formKey,
+              child: new ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  showLogo(),
+                  showEmailInput(),
+                  showPasswordInput(),
+                  showPrimaryButton(),
+                  showSecondaryButton(),
+                  showErrorMessage(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
