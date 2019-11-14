@@ -408,7 +408,7 @@ class _HomePageState extends State<HomePage>
                       new Tab(
                           child: new Row(
                         children: <Widget>[
-                          new Icon(Icons.notifications),
+                          new Icon(Icons.info),
                           new SizedBox(
                             width: 5.0,
                           ),
