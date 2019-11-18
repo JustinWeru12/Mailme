@@ -26,12 +26,8 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   List<Letter> _letterList;
   TabController _tabController;
-  String _trackingno;
-  final _formKey = GlobalKey();
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  final _textEditingController = TextEditingController();
   StreamSubscription<Event> _onLetterAddedSubscription;
   StreamSubscription<Event> _onLetterChangedSubscription;
 
@@ -179,123 +175,6 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  showAddLetterDialog(BuildContext context) async {
-    _textEditingController.clear();
-    await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: Builder(
-                      builder: (context) => Container(
-                          // padding: const EdgeInsets.all(30.0),
-                          height: 200,
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                new Padding(
-                                    padding: EdgeInsets.only(top: 20.0)),
-                                TextFormField(
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontFamily: "WorkSansSemiBold",
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                  autofocus: false,
-                                  decoration: new InputDecoration(
-                                    hintText: 'Tracking Number',
-                                    hintStyle: TextStyle(
-                                        fontFamily: "WorkSansSemiBold",
-                                        fontSize: 17.0),
-                                    icon: new Icon(
-                                      FontAwesomeIcons.envelope,
-                                      color: Colors.grey,
-                                    ),
-                                    border: new OutlineInputBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(25.0),
-                                      borderSide: new BorderSide(),
-                                    ),
-                                  ),
-                                  validator: (value) => value.isEmpty
-                                      ? 'Enter the Tracking Number assigned'
-                                      : null,
-                                  onSaved: (value) =>
-                                      _trackingno = value.trim(),
-                                ),
-                                TextFormField(
-                                  maxLines: 1,
-                                  keyboardType: TextInputType.emailAddress,
-                                  style: TextStyle(
-                                      fontFamily: "WorkSansSemiBold",
-                                      fontSize: 16.0,
-                                      color: Colors.black),
-                                  autofocus: false,
-                                  decoration: new InputDecoration(
-                                      hintText: 'Description',
-                                      hintStyle: TextStyle(
-                                          fontFamily: "WorkSansSemiBold",
-                                          fontSize: 17.0),
-                                      icon: new Icon(
-                                        FontAwesomeIcons.envelope,
-                                        color: Colors.grey,
-                                      ),
-                                      border: new OutlineInputBorder(
-                                        borderRadius:
-                                            new BorderRadius.circular(25.0),
-                                        borderSide: new BorderSide(),
-                                      )),
-                                  validator: (value) => value.isEmpty
-                                      ? 'Enter a brief description assigned'
-                                      : null,
-                                  onSaved: (value) =>
-                                      _trackingno = value.trim(),
-                                ),
-                                FlatButton(
-                                    onPressed: () {
-                                      DatePicker.showDateTimePicker(context,
-                                          showTitleActions: true,
-                                          onChanged: (date) {
-                                        print('change $date in time zone ' +
-                                            date.timeZoneOffset.inHours
-                                                .toString());
-                                      }, onConfirm: (date) {
-                                        print('confirm $date');
-                                      },
-                                          currentTime: DateTime(
-                                              2019, 11, 14, 11, 12, 34));
-                                    },
-                                    child: Text(
-                                      'Select Date',
-                                      style: TextStyle(color: Colors.blue),
-                                    )),
-                              ],
-                            ),
-                          ))),
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              new FlatButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    addNewLetter(_textEditingController.text.toString());
-                    Navigator.pop(context);
-                  })
-            ],
-          );
-        });
-  }
-
   Widget showLetterList() {
     if (_letterList.length > 0) {
       return ListView.builder(
@@ -305,8 +184,7 @@ class _HomePageState extends State<HomePage>
             String letterId = _letterList[index].key;
             String subject = _letterList[index].subject;
             bool completed = _letterList[index].completed;
-            String userId = _letterList[index].userId;
-            return Dismissible(
+              return Dismissible(
               key: Key(letterId),
               background: Container(color: Colors.red),
               onDismissed: (direction) async {
@@ -344,103 +222,100 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        home: DefaultTabController(
-            length: 4,
-            child: Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.deepOrangeAccent,
-                  title: Center(
-                    child: new Text('Mailman'),
-                  ),
-                  textTheme: TextTheme(
-                    title: TextStyle(
-                      fontFamily: "WorkSans-Bold",
-                      color: Colors.blue,
-                      fontSize: 40.0,
+      home: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.deepOrangeAccent,
+            title: Center(
+              child: new Text('Mailman'),
+            ),
+            textTheme: TextTheme(
+              title: TextStyle(
+                fontFamily: "WorkSans-Bold",
+                color: Colors.blue,
+                fontSize: 40.0,
+              ),
+            ),
+            actions: <Widget>[
+              new RaisedButton(
+                  elevation: 5.0,
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(5.0)),
+                  color: Colors.blue,
+                  child: new Text('Logout',
+                      style: new TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        // backgroundColor: Colors.blue
+                      )),
+                  onPressed: signOut)
+            ],
+            bottom: TabBar(
+              isScrollable: true,
+              unselectedLabelColor: Colors.white,
+              labelColor: Colors.amber,
+              labelStyle:
+                  TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              controller: _tabController,
+              tabs: <Widget>[
+                new Tab(
+                    child: new Row(
+                  children: <Widget>[
+                    new Icon(Icons.home),
+                    new SizedBox(
+                      width: 5.0,
                     ),
-                  ),
-                  actions: <Widget>[
-                    new RaisedButton(
-                      elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(5.0)),
-            color: Colors.blue,
-                        child: new Text('Logout',
-                            style: new TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                                // backgroundColor: Colors.blue
-                                )),
-                        onPressed: signOut)
+                    new Text('Home'),
                   ],
-                  bottom: TabBar(
-                    isScrollable: true,
-                    unselectedLabelColor: Colors.white,
-                    labelColor: Colors.amber,
-                    labelStyle: TextStyle(fontSize:20.0,fontWeight: FontWeight.bold),
-                    controller: _tabController,
-                    tabs: <Widget>[
-                      new Tab(
-                          child: new Row(
-                        children: <Widget>[
-                          new Icon(Icons.home),
-                          new SizedBox(
-                            width: 5.0,
-                          ),
-                          new Text('Home'),
-                        ],
-                      )),
-                      new Tab(
-                          child: new Row(
-                        children: <Widget>[
-                          new Icon(Icons.inbox),
-                          new SizedBox(
-                            width: 5.0,
-                          ),
-                          new Text('Mail'),
-                        ],
-                      )),
-                      new Tab(
-                          child: new Row(
-                        children: <Widget>[
-                          new Icon(Icons.person),
-                          new SizedBox(
-                            width: 5.0,
-                          ),
-                          new Text('Profile'),
-                        ],
-                      )),
-                      new Tab(
-                          child: new Row(
-                        children: <Widget>[
-                          new Icon(Icons.info),
-                          new SizedBox(
-                            width: 5.0,
-                          ),
-                          new Text('Info'),
-                        ],
-                      )),
-                    ],
-                    indicatorColor: Colors.white,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                  ),
-                  bottomOpacity: 1,
-                ),
-                body: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    showLetterList(),
-                    LetterPage(),
-                    ProfilePage(),
-                    HelpPage(),
+                )),
+                new Tab(
+                    child: new Row(
+                  children: <Widget>[
+                    new Icon(Icons.inbox),
+                    new SizedBox(
+                      width: 5.0,
+                    ),
+                    new Text('Mail'),
                   ],
-                ),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    showAddLetterDialog(context);
-                  },
-                  tooltip: 'Increment',
-                  child: Icon(Icons.add),
-                ))));
+                )),
+                new Tab(
+                    child: new Row(
+                  children: <Widget>[
+                    new Icon(Icons.person),
+                    new SizedBox(
+                      width: 5.0,
+                    ),
+                    new Text('Profile'),
+                  ],
+                )),
+                new Tab(
+                    child: new Row(
+                  children: <Widget>[
+                    new Icon(Icons.info),
+                    new SizedBox(
+                      width: 5.0,
+                    ),
+                    new Text('Info'),
+                  ],
+                )),
+              ],
+              indicatorColor: Colors.white,
+              indicatorSize: TabBarIndicatorSize.tab,
+            ),
+            bottomOpacity: 1,
+          ),
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              showLetterList(),
+              LetterPage(),
+              ProfilePage(),
+              HelpPage(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

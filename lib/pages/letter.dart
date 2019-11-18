@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:mailman/style/theme.dart' as Theme;
@@ -87,7 +88,7 @@ class _LetterPageState extends State<LetterPage> {
                           fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                       icon: new Icon(
                         FontAwesomeIcons.truck,
-                        color: Colors.grey,
+                        color: Colors.blue,
                       ),
                       border: new OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(25.0),
@@ -109,8 +110,31 @@ class _LetterPageState extends State<LetterPage> {
                       hintStyle: TextStyle(
                           fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                       icon: new Icon(
-                        FontAwesomeIcons.comment,
-                        color: Colors.grey,
+                        FontAwesomeIcons.solidCommentAlt,
+                        color: Colors.blue,
+                      ),
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  TextField(
+                    style: TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 16.0,
+                        color: Colors.black),
+                    autofocus: false,
+                    decoration: new InputDecoration(
+                      labelText: 'Destination Box.',
+                      hintStyle: TextStyle(
+                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                      icon: new Icon(
+                        FontAwesomeIcons.box,
+                        color: Colors.blue,
                       ),
                       border: new OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(25.0),
@@ -159,6 +183,9 @@ class _LetterPageState extends State<LetterPage> {
                         textField: 'display',
                         valueField: 'value',
                       )),
+                      SizedBox(
+                        height: 25.0,
+                      ),
                   RaisedButton(
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
@@ -167,7 +194,10 @@ class _LetterPageState extends State<LetterPage> {
                     onPressed: () {
                       print('Submit Button clicked');
                     },
-                    child: const Text('SUBMIT', style: TextStyle(fontSize: 20)),
+                    child: const Text('SUBMIT', style: TextStyle(fontSize: 20,fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
+                  ),
+                  SizedBox(
+                    height: 10.0,
                   ),
                 ],
               ),
