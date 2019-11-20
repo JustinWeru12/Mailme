@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/services/authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mailman/style/theme.dart' as Theme;

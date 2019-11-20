@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart' as prefix0;
+import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:mailman/style/theme.dart' as Theme;
@@ -12,23 +12,25 @@ class LetterPage extends StatefulWidget {
 
 class _LetterPageState extends State<LetterPage> {
   String trackingNo;
-
-  String sentDate;
-
+  String status;
+  String sBox;
+  String dBox;
   String description;
   String _myActivity;
   String _myActivityResult;
-  final formKey = new GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _myActivity = '';
-    _myActivityResult = '';
+  final _formKey = new GlobalKey<FormState>();
+  bool validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 
-  _saveForm() {
-    var form = formKey.currentState;
+  @override
+   _saveForm() {
+    var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
       setState(() {
@@ -39,6 +41,7 @@ class _LetterPageState extends State<LetterPage> {
 
   @override
   Widget build(BuildContext context) {
+    var letterProvider =Provider.of(context);
     return new Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
@@ -60,7 +63,7 @@ class _LetterPageState extends State<LetterPage> {
               ),
             ),
             child: Form(
-              key: formKey,
+              key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +79,7 @@ class _LetterPageState extends State<LetterPage> {
                   SizedBox(
                     height: 25.0,
                   ),
-                  TextField(
+                  TextFormField(
                     style: TextStyle(
                         fontFamily: "WorkSansSemiBold",
                         fontSize: 16.0,
@@ -95,11 +98,17 @@ class _LetterPageState extends State<LetterPage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    validator: (value){
+                        if (value.isEmpty) {
+                          return 'Please add the Tracking Number';
+                        }
+                        onSaved: (value) => trackingNo =value;
+                      }
                   ),
                   SizedBox(
                     height: 25.0,
                   ),
-                  TextField(
+                  TextFormField(
                     style: TextStyle(
                         fontFamily: "WorkSansSemiBold",
                         fontSize: 16.0,
@@ -118,30 +127,41 @@ class _LetterPageState extends State<LetterPage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    validator: (value){
+                        if (value.isEmpty) {
+                          return 'Please add a description';
+                        }
+                        onSaved: (value) => description =value;
+                      }
                   ),
                   SizedBox(
                     height: 25.0,
                   ),
-                  TextField(
-                    style: TextStyle(
-                        fontFamily: "WorkSansSemiBold",
-                        fontSize: 16.0,
-                        color: Colors.black),
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      labelText: 'Destination Box.',
-                      hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                      icon: new Icon(
-                        FontAwesomeIcons.box,
-                        color: Colors.blue,
+                  TextFormField(
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          color: Colors.black),
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        labelText: 'Destination Box.',
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                        icon: new Icon(
+                          FontAwesomeIcons.box,
+                          color: Colors.blue,
+                        ),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
                       ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                    ),
-                  ),
+                      validator: (value){
+                        if (value.isEmpty) {
+                          return 'Please add a destination address';
+                        }
+                        onSaved: (value) => dBox =value;
+                      }),
                   SizedBox(
                     height: 25.0,
                   ),
@@ -168,14 +188,6 @@ class _LetterPageState extends State<LetterPage> {
                             "value": "Posted",
                           },
                           {
-                            "display": "Sent",
-                            "value": "Sent",
-                          },
-                          {
-                            "display": "Received",
-                            "value": "Received",
-                          },
-                          {
                             "display": "Confirmed",
                             "value": "Confirmed",
                           },
@@ -183,9 +195,9 @@ class _LetterPageState extends State<LetterPage> {
                         textField: 'display',
                         valueField: 'value',
                       )),
-                      SizedBox(
-                        height: 25.0,
-                      ),
+                  SizedBox(
+                    height: 25.0,
+                  ),
                   RaisedButton(
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
@@ -194,7 +206,12 @@ class _LetterPageState extends State<LetterPage> {
                     onPressed: () {
                       print('Submit Button clicked');
                     },
-                    child: const Text('SUBMIT', style: TextStyle(fontSize: 20,fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)),
+                    child: const Text('SUBMIT',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic)),
                   ),
                   SizedBox(
                     height: 10.0,
