@@ -1,11 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mailman/models/letterdetails.dart';
+import 'package:mailman/models/user.dart';
 
 class Letter {
-  
+  final String userId;
+  Letter({this.userId});
 
-  final CollectionReference lettersCollection = Firestore.instance.collection('letters');
+  final CollectionReference lettersCollection =
+      Firestore.instance.collection('letters');
 
-  Future updateLetterData(String trackingNo,String description, String sBox, String dBox, String status, String userId,) async{
+  get key => null;
+
+  Future updateLetterData(
+    String trackingNo,
+    String description,
+    String sBox,
+    String dBox,
+    String status,
+    String userId,
+  ) async {
     return await lettersCollection.document(userId).setData({
       'trackingNo': trackingNo,
       'description': description,
@@ -14,6 +27,36 @@ class Letter {
       'status': status,
     });
   }
+
+  List<LetterDetails> _letterListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return LetterDetails(
+          trackingNo: doc.data["trackingNo"] ?? '',
+          description: doc.data["description"] ?? '',
+          sBox: doc.data["sBox"] ?? '',
+          dBox: doc.data["dBox"] ?? '',
+          status: doc.data["status"] ?? '');
+    }).toList();
+  }
+
+  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    return UserData(
+        userId: userId,
+        trackingNo: snapshot.data['trackingNo'],
+        description: snapshot.data["description"],
+        sBox: snapshot.data["sBox"],
+        dBox: snapshot.data["dBox"],
+        status: snapshot.data["status"]);
+  }
+
+  Stream<List<LetterDetails>> get letters {
+    return lettersCollection.snapshots().map(_letterListFromSnapshot);
+  }
+
+  Stream<UserData> get userData{
+    return lettersCollection.document(userId).snapshots().map(_userDataFromSnapshot);
+  }
+  // LetterDetails fromSnapshot(DataSnapshot snapshot) {}
   // Letter(this.trackingNo,this.description, this.sBox, this.userId, this.dBox);
 
   // Letter.fromSnapshot( snapshot) :
@@ -23,7 +66,6 @@ class Letter {
   //   sBox = snapshot.value["sBox"],
   //   dBox = snapshot.value["dBox"],
   //   status=snapshot.value["status"];
-
 
   // toJson() {
   //   return {

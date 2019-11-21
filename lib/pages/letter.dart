@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:mailman/style/theme.dart' as Theme;
+import 'package:mailman/pages/letter_list.dart';
+import 'package:mailman/models/letter.dart';
 
 class LetterPage extends StatefulWidget {
   @override
@@ -28,8 +30,7 @@ class _LetterPageState extends State<LetterPage> {
     return false;
   }
 
-  @override
-   _saveForm() {
+  _saveForm() {
     var form = _formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -41,7 +42,7 @@ class _LetterPageState extends State<LetterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var letterProvider =Provider.of(context);
+    var letters =Provider.of<QuerySnapshot>(context);
     return new Align(
       alignment: Alignment.center,
       child: SingleChildScrollView(
