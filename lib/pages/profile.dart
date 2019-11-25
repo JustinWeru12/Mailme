@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mailman/style/theme.dart' as Theme;
+import 'package:mailman/models/crud.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -8,11 +10,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String trackingNo;
-
-  String sentDate;
-
-  String description;
+  String fullNames;
+  String email;
+  String phone;
+  String age;
+  String address;
+  CrudMethods crudObj = new CrudMethods();
   String _myActivity;
   String _myActivityResult;
   final formKey = new GlobalKey<FormState>();
@@ -79,8 +82,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     autofocus: false,
                     decoration: new InputDecoration(
                       labelText: 'Full Names.',
+                      hintText: 'John Doe',
                       hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 17.0,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.grey),
                       icon: new Icon(
                         FontAwesomeIcons.solidUser,
                         color: Colors.blue,
@@ -90,6 +97,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    onChanged: (value) {
+                      this.fullNames = value;
+                    },
                   ),
                   SizedBox(
                     height: 25.0,
@@ -102,8 +112,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     autofocus: false,
                     decoration: new InputDecoration(
                       labelText: 'Email.',
+                     hintText: 'name@example.com',
                       hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                          fontFamily: "WorkSansSemiBold", fontSize: 17.0, fontStyle: FontStyle.italic, color: Colors.grey),
                       icon: new Icon(
                         FontAwesomeIcons.at,
                         color: Colors.blue,
@@ -113,6 +124,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    onChanged: (value) {
+                      this.email = value;
+                    },
                   ),
                   SizedBox(
                     height: 25.0,
@@ -125,8 +139,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     autofocus: false,
                     decoration: new InputDecoration(
                       labelText: 'Phone No.',
+                      hintText: '+254712345678',
                       hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                          fontFamily: "WorkSansSemiBold", fontSize: 17.0, fontStyle: FontStyle.italic, color: Colors.grey),
                       icon: new Icon(
                         FontAwesomeIcons.solidAddressBook,
                         color: Colors.blue,
@@ -136,6 +151,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    onChanged: (value) {
+                      this.phone = value;
+                    },
                   ),
                   SizedBox(
                     height: 25.0,
@@ -159,6 +177,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    onChanged: (value) {
+                      this.age = value;
+                    },
                   ),
                   SizedBox(
                     height: 25.0,
@@ -171,8 +192,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     autofocus: false,
                     decoration: new InputDecoration(
                       labelText: 'Address.',
+                      hintText: '123-12345',
                       hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                          fontFamily: "Roboto",
+                          fontSize: 17.0,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
                       icon: new Icon(
                         FontAwesomeIcons.solidEnvelopeOpen,
                         color: Colors.blue,
@@ -182,40 +208,54 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderSide: new BorderSide(),
                       ),
                     ),
+                    onChanged: (value) {
+                      this.address = value;
+                    },
                   ),
                   SizedBox(
                     height: 25.0,
                   ),
-                  TextField(
-                    style: TextStyle(
-                        fontFamily: "WorkSansSemiBold",
-                        fontSize: 16.0,
-                        color: Colors.black),
-                    autofocus: false,
-                    decoration: new InputDecoration(
-                      labelText: 'Postal Code.',
-                      hintStyle: TextStyle(
-                          fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                      icon: new Icon(
-                        FontAwesomeIcons.boxOpen,
-                        color: Colors.blue,
-                      ),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
+                  // TextField(
+                  //   style: TextStyle(
+                  //       fontFamily: "WorkSansSemiBold",
+                  //       fontSize: 16.0,
+                  //       color: Colors.black),
+                  //   autofocus: false,
+                  //   decoration: new InputDecoration(
+                  //     labelText: 'Postal Code.',
+                  //     hintStyle: TextStyle(
+                  //         fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                  //     icon: new Icon(
+                  //       FontAwesomeIcons.boxOpen,
+                  //       color: Colors.blue,
+                  //     ),
+                  //     border: new OutlineInputBorder(
+                  //       borderRadius: new BorderRadius.circular(25.0),
+                  //       borderSide: new BorderSide(),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: 25.0,
+                  // ),
                   RaisedButton(
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30.0)),
                     color: Colors.blue,
                     onPressed: () {
-                      print('Submit Button clicked');
+                      Navigator.of(context).pop();
+                      crudObj.addData({
+                        'fullNames': this.fullNames,
+                        'email': this.email,
+                        'phone': this.phone,
+                        'age': this.age,
+                        'address': this.address
+                      }).then((result) {
+                        dialogTrigger(context);
+                      }).catchError((e) {
+                        print(e);
+                      });
                     },
                     child: const Text('SUBMIT',
                         style: TextStyle(
@@ -234,5 +274,31 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<bool> dialogTrigger(BuildContext context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Profile Added',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic)),
+            content: Text('Successfully'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Done'),
+                textColor: Theme.Colors.loginGradientStart,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 }
