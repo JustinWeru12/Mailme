@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mailman/style/theme.dart' as Theme;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginSignupPage extends StatefulWidget {
   LoginSignupPage({this.auth, this.loginCallback});
@@ -92,7 +93,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Theme.Colors.loginGradientStart,
+      backgroundColor: Colors.grey[50],
       appBar: new AppBar(
         backgroundColor: Colors.deepOrangeAccent,
         title: Center(
@@ -124,7 +125,10 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   Widget _showCircularProgress() {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: SpinKitChasingDots(
+        color: Colors.blue,
+        size: 20.0
+      ));
     }
     return Container(
       height: 0.0,

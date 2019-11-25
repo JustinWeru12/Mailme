@@ -19,7 +19,6 @@ class _LetterPageState extends State<LetterPage> {
   String dBox;
   String description;
   CrudMethods crudObj = new CrudMethods();
-  String _myActivity;
   String _myActivityResult;
   final _formKey = new GlobalKey<FormState>();
   bool validateAndSave() {
@@ -36,7 +35,7 @@ class _LetterPageState extends State<LetterPage> {
     if (form.validate()) {
       form.save();
       setState(() {
-        _myActivityResult = _myActivity;
+        _myActivityResult = status;
       });
     }
   }
@@ -207,15 +206,15 @@ class _LetterPageState extends State<LetterPage> {
                         child: DropDownFormField(
                           titleText: 'Select Status',
                           hintText: 'Please choose one',
-                          value: _myActivity,
+                          value: status,
                           onSaved: (value) {
                             setState(() {
-                              _myActivity = value;
+                              status = value;
                             });
                           },
                           onChanged: (value) {
                             setState(() {
-                              _myActivity = value;
+                              status = value;
                             });
                           },
                           dataSource: [
@@ -227,10 +226,7 @@ class _LetterPageState extends State<LetterPage> {
                               "display": "Dispatched",
                               "value": "Dispatched",
                             },
-                            {
-                              "display": "Received",
-                              "value": "Received"
-                            }
+                            {"display": "Received", "value": "Received"}
                           ],
                           textField: 'display',
                           valueField: 'value',

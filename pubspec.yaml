@@ -15,6 +15,7 @@ dependencies:
   flutter_datetime_picker: ^1.2.8
   dynamic_tabs: ^1.0.2+3
   dropdown_formfield: ^0.1.1
+  flutter_spinkit: "^4.0.0"
 
 dev_dependencies:
   flutter_test:

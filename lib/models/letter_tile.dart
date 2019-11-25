@@ -17,10 +17,10 @@ class LetterTile extends StatelessWidget {
           leading: CircleAvatar(
             radius: 25.0,
             backgroundColor: Colors.brown[300],
-            backgroundImage: AssetImage('assets/coffee_icon.png'),
+            backgroundImage: AssetImage('assets/login_logo.png'),
           ),
           title: Text(letterDetails.trackingNo),
-          subtitle: Text('Your letter was ${letterDetails.status}'),
+          subtitle: Text('Your letter ${letterDetails.trackingNo} was ${letterDetails.status}'),
         ),
       ),
     );
