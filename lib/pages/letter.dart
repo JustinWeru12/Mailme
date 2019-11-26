@@ -290,7 +290,7 @@ class _LetterPageState extends State<LetterPage> {
                 child: Text('Done'),
                 textColor: Theme.Colors.loginGradientStart,
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               )
             ],

@@ -178,48 +178,89 @@ class _HomePageState extends State<HomePage>
         itemCount: letters.documents.length,
         padding: EdgeInsets.all(10.0),
         itemBuilder: (context, i) {
-          return Card(
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Theme.Colors.loginGradientStart,
-                      Theme.Colors.loginGradientEnd
-                    ],
+          return GestureDetector(
+            onTap: () {
+              Card(
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Theme.Colors.loginGradientStart,
+                          Theme.Colors.loginGradientEnd
+                        ],
+                      ),
+                    ),
+                    child: new ListTile(
+                      leading: CircleAvatar(
+                        radius: 30.0,
+                        backgroundColor: Colors.brown[300],
+                        backgroundImage: AssetImage('assets/glass.png'),
+                      ),
+                      title: Text(
+                        '\n Tracking No.:${letters.documents[i].data['trackingNo']}',
+                        style: TextStyle(
+                            fontFamily: 'Roboto',
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '\nDescription: ${letters.documents[i].data['description']} \nFrom: ${letters.documents[i].data['source Box']} \nTo:${letters.documents[i].data['source Box']}\nStatus:${letters.documents[i].data['status']}\n',
+                        style:
+                            TextStyle(fontFamily: 'Spectral', fontSize: 25.0),
+                      ),
+                    ),
+                  ));
+            },
+            child: Card(
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Theme.Colors.loginGradientStart,
+                        Theme.Colors.loginGradientEnd
+                      ],
+                    ),
                   ),
-                ),
-                child: new ListTile(
-                  leading: CircleAvatar(
-                    radius: 30.0,
-                    backgroundColor: Colors.brown[300],
-                    backgroundImage: AssetImage('assets/glass.png'),
+                  child: new ListTile(
+                    leading: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: Colors.brown[300],
+                      backgroundImage: AssetImage('assets/glass.png'),
+                    ),
+                    title: Text(
+                      '\n Tracking No.:${letters.documents[i].data['trackingNo']}',
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      '\nA ${letters.documents[i].data['description']} From ${letters.documents[i].data['source Box']} has been ${letters.documents[i].data['status']}\n',
+                      style: TextStyle(fontFamily: 'Spectral', fontSize: 25.0),
+                    ),
                   ),
-                  title: Text(
-                    '\n Tracking No.:${letters.documents[i].data['trackingNo']}',
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    '\nFrom ${letters.documents[i].data['source Box']} has been ${letters.documents[i].data['status']}\n',
-                    style: TextStyle(fontFamily: 'Spectral', fontSize: 25.0),
-                  ),
-                ),
-              ));
+                )),
+          );
         },
       );
     } else {
       return Center(
           child: Text(
-        "Welcome. Your list is empty",
+        "Welcome. Your list is Loading....",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 30.0),
       ));
