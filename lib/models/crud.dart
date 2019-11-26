@@ -30,4 +30,7 @@ class CrudMethods {
   getData() async{
     return await Firestore.instance.collection('letters').getDocuments();
   }
+  getProfile() async{
+    return await Firestore.instance.collection('profile').getDocuments();
+  }
 }

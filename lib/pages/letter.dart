@@ -12,11 +12,11 @@ class LetterPage extends StatefulWidget {
 }
 
 class _LetterPageState extends State<LetterPage> {
-  String trackingNo;
+  TextEditingController trackingNo = TextEditingController();
   String status;
-  String sBox;
-  String dBox;
-  String description;
+  TextEditingController sBox = TextEditingController();
+  TextEditingController dBox = TextEditingController();
+  TextEditingController description = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
   String _myActivityResult;
   final _formKey = new GlobalKey<FormState>();
@@ -80,122 +80,118 @@ class _LetterPageState extends State<LetterPage> {
                       height: 25.0,
                     ),
                     TextFormField(
-                        style: TextStyle(
-                            fontFamily: "WorkSansSemiBold",
-                            fontSize: 16.0,
-                            color: Colors.black),
-                        autofocus: false,
-                        decoration: new InputDecoration(
-                          labelText: 'Tracking No.',
-                          hintStyle: TextStyle(
-                              fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          icon: new Icon(
-                            FontAwesomeIcons.truck,
-                            color: Colors.blue,
-                          ),
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
-                          ),
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          color: Colors.black),
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        labelText: 'Tracking No.',
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                        icon: new Icon(
+                          FontAwesomeIcons.truck,
+                          color: Colors.blue,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please add the Tracking Number';
-                          }
-                        },
-                        onChanged: (value) {
-                          this.trackingNo = value;
-                        }),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please add the Tracking Number';
+                        }
+                      },
+                      controller: trackingNo,
+                    ),
                     SizedBox(
                       height: 25.0,
                     ),
                     TextFormField(
-                        style: TextStyle(
-                            fontFamily: "WorkSansSemiBold",
-                            fontSize: 16.0,
-                            color: Colors.black),
-                        autofocus: false,
-                        decoration: new InputDecoration(
-                          labelText: 'Description.',
-                          hintStyle: TextStyle(
-                              fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          icon: new Icon(
-                            FontAwesomeIcons.solidCommentAlt,
-                            color: Colors.blue,
-                          ),
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
-                          ),
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          color: Colors.black),
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        labelText: 'Description.',
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                        icon: new Icon(
+                          FontAwesomeIcons.solidCommentAlt,
+                          color: Colors.blue,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please add a description';
-                          }
-                        },
-                        onChanged: (value) {
-                          this.description = value;
-                        }),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please add a description';
+                        }
+                      },
+                      controller: description,
+                    ),
                     SizedBox(
                       height: 25.0,
                     ),
                     TextFormField(
-                        style: TextStyle(
-                            fontFamily: "WorkSansSemiBold",
-                            fontSize: 16.0,
-                            color: Colors.black),
-                        autofocus: false,
-                        decoration: new InputDecoration(
-                          labelText: 'Source Box.',
-                          hintStyle: TextStyle(
-                              fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          icon: new Icon(
-                            FontAwesomeIcons.box,
-                            color: Colors.blue,
-                          ),
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
-                          ),
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          color: Colors.black),
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        labelText: 'Source Box.',
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                        icon: new Icon(
+                          FontAwesomeIcons.box,
+                          color: Colors.blue,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please add a Source address';
-                          }
-                        },
-                        onChanged: (value) {
-                          this.sBox = value;
-                        }),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please add a Source address';
+                        }
+                      },
+                      controller: sBox,
+                    ),
                     SizedBox(
                       height: 25.0,
                     ),
                     TextFormField(
-                        style: TextStyle(
-                            fontFamily: "WorkSansSemiBold",
-                            fontSize: 16.0,
-                            color: Colors.black),
-                        autofocus: false,
-                        decoration: new InputDecoration(
-                          labelText: 'Destination Box.',
-                          hintStyle: TextStyle(
-                              fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          icon: new Icon(
-                            FontAwesomeIcons.boxOpen,
-                            color: Colors.blue,
-                          ),
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
-                          ),
+                      style: TextStyle(
+                          fontFamily: "WorkSansSemiBold",
+                          fontSize: 16.0,
+                          color: Colors.black),
+                      autofocus: false,
+                      decoration: new InputDecoration(
+                        labelText: 'Destination Box.',
+                        hintStyle: TextStyle(
+                            fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                        icon: new Icon(
+                          FontAwesomeIcons.boxOpen,
+                          color: Colors.blue,
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please add a destination address';
-                          }
-                        },
-                        onChanged: (value) {
-                          this.dBox = value;
-                        }),
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(25.0),
+                          borderSide: new BorderSide(),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please add a destination address';
+                        }
+                      },
+                      controller: dBox,
+                    ),
                     SizedBox(
                       height: 25.0,
                     ),
@@ -239,15 +235,19 @@ class _LetterPageState extends State<LetterPage> {
                           borderRadius: new BorderRadius.circular(30.0)),
                       color: Colors.blue,
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                         crudObj.addLetter({
-                          'trackingNo': this.trackingNo,
-                          'description': this.description,
-                          'destination Box': this.dBox,
-                          'source Box': this.sBox,
+                          'trackingNo': trackingNo.text.toString(),
+                          'description': description.text.toString(),
+                          'destination Box': dBox.text.toString(),
+                          'source Box': sBox.text.toString(),
                           'status': this.status
                         }).then((result) {
                           dialogTrigger(context);
+                          trackingNo.text = '';
+                          description.text = '';
+                          dBox.text = '';
+                          sBox.text = '';
                         }).catchError((e) {
                           print(e);
                         });
@@ -290,7 +290,7 @@ class _LetterPageState extends State<LetterPage> {
                 child: Text('Done'),
                 textColor: Theme.Colors.loginGradientStart,
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.of(context).pop();
                 },
               )
             ],

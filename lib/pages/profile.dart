@@ -9,11 +9,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String fullNames;
-  String email;
-  String phone;
-  String age;
-  String address;
+  TextEditingController fullNames = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController address = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
   String _myActivity;
   String _myActivityResult;
@@ -131,9 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderSide: new BorderSide(),
                   ),
                 ),
-                onChanged: (value) {
-                  this.fullNames = value;
-                },
+                controller: fullNames,
               ),
               SizedBox(
                 height: 25.0,
@@ -161,9 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderSide: new BorderSide(),
                   ),
                 ),
-                onChanged: (value) {
-                  this.email = value;
-                },
+                controller: email,
               ),
               SizedBox(
                 height: 25.0,
@@ -191,9 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderSide: new BorderSide(),
                   ),
                 ),
-                onChanged: (value) {
-                  this.phone = value;
-                },
+                controller: phone,
               ),
               SizedBox(
                 height: 25.0,
@@ -217,9 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderSide: new BorderSide(),
                   ),
                 ),
-                onChanged: (value) {
-                  this.age = value;
-                },
+                controller: age,
               ),
               SizedBox(
                 height: 25.0,
@@ -248,9 +240,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderSide: new BorderSide(),
                   ),
                 ),
-                onChanged: (value) {
-                  this.address = value;
-                },
+                controller: address,
               ),
               SizedBox(
                 height: 25.0,
@@ -284,15 +274,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: new BorderRadius.circular(30.0)),
                 color: Colors.blue,
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  print(fullNames);
+                  print(email);
+                  // Navigator.of(context).pop();
                   crudObj.addData({
-                    'fullNames': this.fullNames,
-                    'email': this.email,
-                    'phone': this.phone,
-                    'age': this.age,
-                    'address': this.address
+                    'fullNames': fullNames.text.toString(),
+                    'email': email.text.toString(),
+                    'phone': phone.text.toString(),
+                    'age': age.text.toString(),
+                    'address': address.text.toString()
                   }).then((result) {
                     dialogTrigger(context);
+                    fullNames.text = '';
+                    email.text = '';
+                    phone.text = '';
+                    age.text = '';
+                    address.text = '';
                   }).catchError((e) {
                     print(e);
                   });

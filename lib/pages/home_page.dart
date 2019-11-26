@@ -207,13 +207,13 @@ class _HomePageState extends State<HomePage>
                         '\n Tracking No.:${letters.documents[i].data['trackingNo']}',
                         style: TextStyle(
                             fontFamily: 'Roboto',
-                            fontSize: 30.0,
+                            fontSize: 25.0,
                             fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
                         '\nDescription: ${letters.documents[i].data['description']} \nFrom: ${letters.documents[i].data['source Box']} \nTo:${letters.documents[i].data['source Box']}\nStatus:${letters.documents[i].data['status']}\n',
                         style:
-                            TextStyle(fontFamily: 'Spectral', fontSize: 25.0),
+                            TextStyle(fontFamily: 'Spectral', fontSize: 12.0),
                       ),
                     ),
                   ));

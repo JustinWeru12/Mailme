@@ -116,12 +116,11 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             overflow: Overflow.visible,
             children: <Widget>[
               new Image.asset(
-                  'assets/envelop.png',
-                  width: size.width,
-                  height: size.height,
-                  fit: BoxFit.fill,
-                ),
-              
+                'assets/envelop.png',
+                width: size.width,
+                height: size.height,
+                fit: BoxFit.fill,
+              ),
               _showForm(),
               _showCircularProgress(),
             ],
@@ -133,10 +132,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   Widget _showCircularProgress() {
     if (_isLoading) {
-      return Center(child: SpinKitChasingDots(
-        color: Colors.blue,
-        size: 20.0
-      ));
+      return Center(child: SpinKitCircle(color: Colors.blue, size: 40.0));
     }
     return Container(
       height: 0.0,
