@@ -14,7 +14,7 @@ class HelpPage extends StatelessWidget {
       height: screenSize.height / 2.6,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/home.jpeg'),
+          image: AssetImage('assets/home.png'),
           fit: BoxFit.cover,
         ),
       ),

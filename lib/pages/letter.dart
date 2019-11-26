@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -181,7 +180,7 @@ class _LetterPageState extends State<LetterPage> {
                           hintStyle: TextStyle(
                               fontFamily: "WorkSansSemiBold", fontSize: 17.0),
                           icon: new Icon(
-                            FontAwesomeIcons.box,
+                            FontAwesomeIcons.boxOpen,
                             color: Colors.blue,
                           ),
                           border: new OutlineInputBorder(

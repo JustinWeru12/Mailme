@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mailman/models/letterdetails.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:mailman/pages/help.dart';
 import 'package:mailman/pages/profile.dart';
 import 'package:mailman/pages/letter.dart';
+import 'package:mailman/style/theme.dart' as Theme;
 import 'package:provider/provider.dart';
-import 'package:mailman/pages/letter_list.dart';
+import 'package:mailman/models/crud.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.auth, this.userId, this.logoutCallback})
@@ -24,9 +26,23 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  String trackingNo;
+  String description;
+  String sBox;
+  String dBox;
+  String status;
+  QuerySnapshot letters;
+
+  CrudMethods crudObj = new CrudMethods();
+
   @override
   void initState() {
     _tabController = new TabController(length: 4, vsync: this);
+    crudObj.getData().then((results) {
+      setState(() {
+        letters = results;
+      });
+    });
     super.initState();
 
     @override
@@ -42,6 +58,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return new StreamProvider<List<LetterDetails>>.value(
       // value: Letter().letters,
       child: DefaultTabController(
@@ -50,7 +67,7 @@ class _HomePageState extends State<HomePage>
           appBar: new AppBar(
             backgroundColor: Colors.deepOrangeAccent,
             title: Center(
-              child: new Text('Mailman'),
+              child: new Text('\t\t\t\tMailman'),
             ),
             textTheme: TextTheme(
               title: TextStyle(
@@ -127,17 +144,85 @@ class _HomePageState extends State<HomePage>
             ),
             bottomOpacity: 1,
           ),
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              LetterList(),
-              LetterPage(),
-              ProfilePage(),
-              HelpPage(),
+          body: Stack(
+            children: <Widget>[
+              Center(
+                child: new Image.asset(
+                  'assets/envelop.png',
+                  width: size.width,
+                  height: size.height,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Center(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _letterList(),
+                    LetterPage(),
+                    ProfilePage(),
+                    HelpPage(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _letterList() {
+    if (letters != null) {
+      return ListView.builder(
+        itemCount: letters.documents.length,
+        padding: EdgeInsets.all(10.0),
+        itemBuilder: (context, i) {
+          return Card(
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Theme.Colors.loginGradientStart,
+                      Theme.Colors.loginGradientEnd
+                    ],
+                  ),
+                ),
+                child: new ListTile(
+                  leading: CircleAvatar(
+                    radius: 30.0,
+                    backgroundColor: Colors.brown[300],
+                    backgroundImage: AssetImage('assets/glass.png'),
+                  ),
+                  title: Text(
+                    '\n Tracking No.:${letters.documents[i].data['trackingNo']}',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    '\nFrom ${letters.documents[i].data['source Box']} has been ${letters.documents[i].data['status']}\n',
+                    style: TextStyle(fontFamily: 'Spectral', fontSize: 25.0),
+                  ),
+                ),
+              ));
+        },
+      );
+    } else {
+      return Center(
+          child: Text(
+        "Welcome. Your list is empty",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 30.0),
+      ));
+    }
   }
 }

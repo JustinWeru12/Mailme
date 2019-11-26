@@ -92,6 +92,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return new Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: new AppBar(
@@ -114,6 +115,13 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
             alignment: Alignment(0.0, 0.0),
             overflow: Overflow.visible,
             children: <Widget>[
+              new Image.asset(
+                  'assets/envelop.png',
+                  width: size.width,
+                  height: size.height,
+                  fit: BoxFit.fill,
+                ),
+              
               _showForm(),
               _showCircularProgress(),
             ],
