@@ -236,6 +236,7 @@ class _LetterPageState extends State<LetterPage> {
                       color: Colors.blue,
                       onPressed: () {
                         // Navigator.of(context).pop();
+                        if(_formKey.currentState.validate()){
                         crudObj.addLetter({
                           'trackingNo': trackingNo.text.toString(),
                           'description': description.text.toString(),
@@ -251,7 +252,7 @@ class _LetterPageState extends State<LetterPage> {
                         }).catchError((e) {
                           print(e);
                         });
-                      },
+                      }},
                       child: const Text('SUBMIT',
                           style: TextStyle(
                               fontSize: 20,

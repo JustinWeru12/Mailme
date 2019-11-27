@@ -66,7 +66,10 @@ class _ProfilePageState extends State<ProfilePage> {
             content: Text('Successfully'),
             actions: <Widget>[
               FlatButton(
-                child: Text('Done',style: TextStyle(fontSize: 15.0),),
+                child: Text(
+                  'Done',
+                  style: TextStyle(fontSize: 15.0),
+                ),
                 textColor: Theme.Colors.loginGradientEnd,
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -109,7 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     TextStyle(fontSize: 30.0, fontFamily: 'WorkSansSemiBold'),
               ),
               SizedBox(height: 25.0),
-              TextField(
+              TextFormField(
                 style: TextStyle(
                     fontFamily: "WorkSansSemiBold",
                     fontSize: 16.0,
@@ -133,11 +136,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 controller: fullNames,
+                validator: (value) {
+                  if (!value.contains(' ')) {
+                    return 'Please enter a valid Name';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 25.0,
               ),
-              TextField(
+              TextFormField(
                 style: TextStyle(
                     fontFamily: "WorkSansSemiBold",
                     fontSize: 16.0,
@@ -161,11 +170,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 controller: email,
+                validator: (value) {
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid Email';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 25.0,
               ),
-              TextField(
+              TextFormField(
                 style: TextStyle(
                     fontFamily: "WorkSansSemiBold",
                     fontSize: 16.0,
@@ -189,11 +204,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 controller: phone,
+                validator: (value) {
+                  if (!(value.startsWith('+254'))) {
+                    return 'Please enter a valid phone Number';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 25.0,
               ),
-              TextField(
+              TextFormField(
                 style: TextStyle(
                     fontFamily: "WorkSansSemiBold",
                     fontSize: 16.0,
@@ -213,11 +234,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 controller: age,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Age is Required';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 25.0,
               ),
-              TextField(
+              TextFormField(
                 style: TextStyle(
                     fontFamily: "WorkSansSemiBold",
                     fontSize: 16.0,
@@ -242,11 +269,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 controller: address,
+                validator: (value) {
+                  if (!value.contains('-')) {
+                    return 'Please enter a valid Address';
+                  }
+                  return null;
+                },
               ),
               SizedBox(
                 height: 25.0,
               ),
-              // TextField(
+              // TextFormField(
               //   style: TextStyle(
               //       fontFamily: "WorkSansSemiBold",
               //       fontSize: 16.0,
@@ -275,25 +308,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: new BorderRadius.circular(30.0)),
                 color: Colors.blue,
                 onPressed: () {
-                  print(fullNames);
-                  print(email);
-                  // Navigator.of(context).pop();
-                  crudObj.addData({
-                    'fullNames': fullNames.text.toString(),
-                    'email': email.text.toString(),
-                    'phone': phone.text.toString(),
-                    'age': age.text.toString(),
-                    'address': address.text.toString()
-                  }).then((result) {
-                    dialogTrigger(context);
-                    fullNames.text = '';
-                    email.text = '';
-                    phone.text = '';
-                    age.text = '';
-                    address.text = '';
-                  }).catchError((e) {
-                    print(e);
-                  });
+                  if (formKey.currentState.validate()) {
+                    // Navigator.of(context).pop();
+                    crudObj.addData({
+                      'fullNames': fullNames.text.toString(),
+                      'email': email.text.toString(),
+                      'phone': phone.text.toString(),
+                      'age': age.text.toString(),
+                      'address': address.text.toString()
+                    }).then((result) {
+                      dialogTrigger(context);
+                      fullNames.text = '';
+                      email.text = '';
+                      phone.text = '';
+                      age.text = '';
+                      address.text = '';
+                    }).catchError((e) {
+                      print(e);
+                    });
+                  }
                 },
                 child: const Text('SUBMIT',
                     style: TextStyle(

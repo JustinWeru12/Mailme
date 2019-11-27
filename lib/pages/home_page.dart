@@ -90,6 +90,9 @@ class _HomePageState extends State<HomePage>
                         });
                       },
                     ),
+                    new SizedBox(
+                      width: 10.0,
+                    ),
                   new RaisedButton(
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
