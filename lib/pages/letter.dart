@@ -18,7 +18,7 @@ class _LetterPageState extends State<LetterPage> {
   TextEditingController dBox = TextEditingController();
   TextEditingController description = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
-  String _myActivityResult;
+  // String _myActivityResult;
   final _formKey = new GlobalKey<FormState>();
   bool validateAndSave() {
     final form = _formKey.currentState;
@@ -29,15 +29,15 @@ class _LetterPageState extends State<LetterPage> {
     return false;
   }
 
-  _saveForm() {
-    var form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      setState(() {
-        _myActivityResult = status;
-      });
-    }
-  }
+  // _saveForm() {
+  //   var form = _formKey.currentState;
+  //   if (form.validate()) {
+  //     form.save();
+  //     setState(() {
+  //       _myActivityResult = status;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +102,7 @@ class _LetterPageState extends State<LetterPage> {
                         if (value.isEmpty) {
                           return 'Please add the Tracking Number';
                         }
+                        return null;
                       },
                       controller: trackingNo,
                     ),
@@ -131,6 +132,7 @@ class _LetterPageState extends State<LetterPage> {
                         if (value.isEmpty) {
                           return 'Please add a description';
                         }
+                        return null;
                       },
                       controller: description,
                     ),
@@ -160,6 +162,7 @@ class _LetterPageState extends State<LetterPage> {
                         if (value.isEmpty) {
                           return 'Please add a Source address';
                         }
+                        return null;
                       },
                       controller: sBox,
                     ),
@@ -189,6 +192,7 @@ class _LetterPageState extends State<LetterPage> {
                         if (value.isEmpty) {
                           return 'Please add a destination address';
                         }
+                        return null;
                       },
                       controller: dBox,
                     ),
@@ -201,6 +205,12 @@ class _LetterPageState extends State<LetterPage> {
                         child: DropDownFormField(
                           titleText: 'Select Status',
                           hintText: 'Please choose one',
+                          validator: (value) {
+                            if (value == null) {
+                              return "Select the letter Status";
+                            }
+                            return null;
+                          },
                           value: status,
                           onSaved: (value) {
                             setState(() {
@@ -236,23 +246,24 @@ class _LetterPageState extends State<LetterPage> {
                       color: Colors.blue,
                       onPressed: () {
                         // Navigator.of(context).pop();
-                        if(_formKey.currentState.validate()){
-                        crudObj.addLetter({
-                          'trackingNo': trackingNo.text.toString(),
-                          'description': description.text.toString(),
-                          'destination Box': dBox.text.toString(),
-                          'source Box': sBox.text.toString(),
-                          'status': this.status
-                        }).then((result) {
-                          dialogTrigger(context);
-                          trackingNo.text = '';
-                          description.text = '';
-                          dBox.text = '';
-                          sBox.text = '';
-                        }).catchError((e) {
-                          print(e);
-                        });
-                      }},
+                        if (_formKey.currentState.validate()) {
+                          crudObj.addLetter({
+                            'trackingNo': trackingNo.text.toString(),
+                            'description': description.text.toString(),
+                            'destination Box': dBox.text.toString(),
+                            'source Box': sBox.text.toString(),
+                            'status': this.status
+                          }).then((result) {
+                            dialogTrigger(context);
+                            trackingNo.text = '';
+                            description.text = '';
+                            dBox.text = '';
+                            sBox.text = '';
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        }
+                      },
                       child: const Text('SUBMIT',
                           style: TextStyle(
                               fontSize: 20,
@@ -279,7 +290,7 @@ class _LetterPageState extends State<LetterPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-             shape: RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
             title: Text('Letter Added',

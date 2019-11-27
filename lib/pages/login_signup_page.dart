@@ -110,21 +110,22 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
         ),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Stack(
-            alignment: Alignment(0.0, 0.0),
-            overflow: Overflow.visible,
-            children: <Widget>[
-              new Image.asset(
-                'assets/envelop.png',
-                width: size.width,
-                height: size.height,
-                fit: BoxFit.fill,
-              ),
-              _showForm(),
-              _showCircularProgress(),
-            ],
-          ),
+        child: Stack(
+          alignment: Alignment(0.0, 0.0),
+          overflow: Overflow.visible,
+          children: <Widget>[
+            new Image.asset(
+              'assets/envelop.png',
+              width: size.width,
+              height: size.height,
+              fit: BoxFit.fill,
+            ),
+            SingleChildScrollView(
+                child: Center(
+                  child: Stack(
+                      children: <Widget>[_showForm(), _showCircularProgress()]),
+                )),
+          ],
         ),
       ),
     );

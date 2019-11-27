@@ -28,9 +28,27 @@ class CrudMethods {
   }
 
   getData() async{
-    return await Firestore.instance.collection('letters').getDocuments();
+    return await Firestore.instance.collection('letters').snapshots();
   }
   getProfile() async{
     return await Firestore.instance.collection('profile').getDocuments();
+  }
+  updateData(selectedDoc, newValues){
+    Firestore.instance
+        .collection('letters')
+        .document(selectedDoc)
+        .updateData(newValues)
+        .catchError((e){
+      print(e);
+    });
+  }
+  deleteData(docId){
+    Firestore.instance
+        .collection('letters')
+        .document(docId)
+        .delete()
+        .catchError((e){
+      print(e);
+    });
   }
 }

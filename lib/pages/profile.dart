@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mailman/style/theme.dart' as Theme;
 import 'package:mailman/models/crud.dart';
@@ -16,26 +16,27 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController age = TextEditingController();
   TextEditingController address = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
-  String _myActivity;
-  String _myActivityResult;
+  // String _myActivity;
+  // String _myActivityResult;
   final formKey = new GlobalKey<FormState>();
+  final length = Firestore.instance.collection('profile').snapshots().length.toString();
 
   @override
   void initState() {
     super.initState();
-    _myActivity = '';
-    _myActivityResult = '';
+    // _myActivity = '';
+    // _myActivityResult = '';
   }
 
-  _saveForm() {
-    var form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      setState(() {
-        _myActivityResult = _myActivity;
-      });
-    }
-  }
+  // _saveForm() {
+  //   var form = formKey.currentState;
+  //   if (form.validate()) {
+  //     form.save();
+  //     setState(() {
+  //       _myActivityResult = _myActivity;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

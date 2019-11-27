@@ -5,7 +5,7 @@ class HelpPage extends StatelessWidget {
   final String _status = "Software Developer";
   final String _bio =
       "\"Hi, I am a Freelance developer working under Orion Industries. If you want to contact me or Get help about this product leave a message.\"";
-  final String _followers = "173";
+  final String _followers = "177";
   final String _repositories = "4";
   final String _scores = "450";
 

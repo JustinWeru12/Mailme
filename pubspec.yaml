@@ -18,6 +18,7 @@ dependencies:
   flutter_spinkit: "^4.0.0"
   url_launcher:
   pull_to_refresh: ^1.5.7
+  flutter_email_sender: ^2.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
