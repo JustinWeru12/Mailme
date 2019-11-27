@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/models/letterdetails.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:mailman/pages/help.dart';
@@ -80,25 +81,26 @@ class _HomePageState extends State<HomePage>
               Row(
                 children: <Widget>[
                   IconButton(
-                      icon: Icon(Icons.refresh),
-                      onPressed: () {
-                        crudObj.getData().then((results) {
-                          setState(() {
-                            letters = results;
-                          });
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      crudObj.getData().then((results) {
+                        setState(() {
+                          letters = results;
                         });
-                      },
-                    ),
-                    new SizedBox(
-                      width: 10.0,
-                    ),
+                      });
+                    },
+                  ),
+                  new SizedBox(
+                    width: 10.0,
+                  ),
                   new RaisedButton(
                     elevation: 5.0,
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(5.0)),
                     color: Colors.blue,
                     child: new Text('Logout',
-                        style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+                        style:
+                            new TextStyle(fontSize: 20.0, color: Colors.black)),
                     onPressed: () async {
                       await widget.auth.signOut();
                       widget.logoutCallback();
@@ -254,13 +256,17 @@ class _HomePageState extends State<HomePage>
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
             title: Text('This Letter is In Transit',
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 25.0,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic)),
-            content: Text('Await of any changes'),
+                    fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.center,),
+            content: Text('Await for any changes',textAlign: TextAlign.center,),
             actions: <Widget>[
               FlatButton(
                 child: Text(

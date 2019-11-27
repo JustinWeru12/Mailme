@@ -57,6 +57,9 @@ class _ProfilePageState extends State<ProfilePage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
             title: Text('Profile Added',
                 style: TextStyle(
                     fontSize: 20,

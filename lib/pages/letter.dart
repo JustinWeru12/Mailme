@@ -279,6 +279,9 @@ class _LetterPageState extends State<LetterPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
+             shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
             title: Text('Letter Added',
                 style: TextStyle(
                     fontSize: 20,
