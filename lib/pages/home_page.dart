@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/models/letterdetails.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:mailman/pages/help.dart';
@@ -77,17 +78,31 @@ class _HomePageState extends State<HomePage>
               ),
             ),
             actions: <Widget>[
-              new RaisedButton(
-                elevation: 5.0,
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(5.0)),
-                color: Colors.blue,
-                child: new Text('Logout',
-                    style: new TextStyle(fontSize: 20.0, color: Colors.black)),
-                onPressed: () async {
-                  await widget.auth.signOut();
-                  widget.logoutCallback();
-                },
+              Row(
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        crudObj.getData().then((results) {
+                          setState(() {
+                            letters = results;
+                          });
+                        });
+                      },
+                    ),
+                  new RaisedButton(
+                    elevation: 5.0,
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(5.0)),
+                    color: Colors.blue,
+                    child: new Text('Logout',
+                        style: new TextStyle(fontSize: 20.0, color: Colors.black)),
+                    onPressed: () async {
+                      await widget.auth.signOut();
+                      widget.logoutCallback();
+                    },
+                  ),
+                ],
               ),
             ],
             bottom: TabBar(
@@ -180,43 +195,7 @@ class _HomePageState extends State<HomePage>
         itemBuilder: (context, i) {
           return GestureDetector(
             onTap: () {
-              Card(
-                  elevation: 5.0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  child: Container(
-                    padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
-                        colors: [
-                          Theme.Colors.loginGradientStart,
-                          Theme.Colors.loginGradientEnd
-                        ],
-                      ),
-                    ),
-                    child: new ListTile(
-                      leading: CircleAvatar(
-                        radius: 30.0,
-                        backgroundColor: Colors.brown[300],
-                        backgroundImage: AssetImage('assets/glass.png'),
-                      ),
-                      title: Text(
-                        '\n Tracking No.:${letters.documents[i].data['trackingNo']}',
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 25.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        '\nDescription: ${letters.documents[i].data['description']} \nFrom: ${letters.documents[i].data['source Box']} \nTo:${letters.documents[i].data['source Box']}\nStatus:${letters.documents[i].data['status']}\n',
-                        style:
-                            TextStyle(fontFamily: 'Spectral', fontSize: 12.0),
-                      ),
-                    ),
-                  ));
+              dialogTrigger(context);
             },
             child: Card(
                 elevation: 5.0,
@@ -265,5 +244,34 @@ class _HomePageState extends State<HomePage>
         style: TextStyle(fontSize: 30.0),
       ));
     }
+  }
+
+  Future<bool> dialogTrigger(BuildContext context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('This Letter is In Transit',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic)),
+            content: Text('Await of any changes'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  'Done',
+                  style: TextStyle(fontSize: 15.0),
+                ),
+                textColor: Theme.Colors.loginGradientEnd,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 }
