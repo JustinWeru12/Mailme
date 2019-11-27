@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/models/letterdetails.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:mailman/pages/help.dart';
