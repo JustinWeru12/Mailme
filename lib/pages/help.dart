@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HelpPage extends StatelessWidget {
-  final String _fullName = "Waweru";
+  final String _fullName = "Waweru Ndirangu";
   final String _status = "Software Developer";
   final String _bio =
       "\"Hi, I am a Freelance developer working under Orion Industries. If you want to contact me or Get help about this product leave a message.\"";
@@ -66,7 +66,7 @@ class HelpPage extends StatelessWidget {
         _status,
         style: TextStyle(
           fontFamily: 'Spectral',
-          color: Colors.black,
+          // color: Colors.black,
           fontSize: 20.0,
           fontWeight: FontWeight.w300,
         ),
@@ -127,7 +127,7 @@ class HelpPage extends StatelessWidget {
       fontWeight: FontWeight.w400,//try changing weight to w500 if not thin
       fontStyle: FontStyle.italic,
       color: Color(0xFF799497),
-      fontSize: 16.0,
+      fontSize: 20.0,
     );
 
     return Container(

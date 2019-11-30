@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: new ThemeData(
           primarySwatch: Colors.blue,
+          brightness: Brightness.dark
         ),
         home: new RootPage(auth: new Auth()));
   }

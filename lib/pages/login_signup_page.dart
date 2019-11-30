@@ -96,7 +96,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
     return new Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: new AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Colors.blueGrey[800],
         title: Center(
           child: new Text('Mailman'),
         ),

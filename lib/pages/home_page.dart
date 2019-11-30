@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage>
         length: 4,
         child: Scaffold(
           appBar: new AppBar(
-            backgroundColor: Colors.deepOrangeAccent,
+            backgroundColor: Colors.blueGrey[800],
             title: Center(
               child: new Text('\t\t\t\tMailman'),
             ),
@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage>
                                 fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            '\nA ${snapshot.data.documents[i].data['description']} From ${snapshot.data.documents[i].data['source Box']} has been ${snapshot.data.documents[i].data['status']}\n',
+                            '\nDescription: ${snapshot.data.documents[i].data['description']} \nFrom: ${snapshot.data.documents[i].data['source Box']} \nStatus: ${snapshot.data.documents[i].data['status']}\n',
                             style: TextStyle(
                                 fontFamily: 'Spectral', fontSize: 20.0),
                           ),
@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage>
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
-            ),backgroundColor: Colors.blueGrey[100],
+            ),
             title: Text('Update Data', style: TextStyle(fontSize: 25.0),textAlign: TextAlign.center,),
             content: Container(
               height: 100.0,
@@ -370,6 +370,7 @@ class _HomePageState extends State<HomePage>
                   Navigator.of(context).pop();
                   crudObj.updateData(selectedDoc, {'status': this.status}).then(
                       (result) {
+                        formKey.currentState.reset();
                     // dialogTrigger(context);
                   }).catchError((e) {
                     print(e);
