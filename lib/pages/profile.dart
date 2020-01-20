@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mailman/models/profiledetails.dart';
+import 'package:mailman/pages/profile_list.dart';
 import 'package:mailman/style/theme.dart' as Theme;
 import 'package:mailman/models/crud.dart';
+import 'package:provider/provider.dart';
+import 'package:mailman/models/profile.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -19,10 +24,16 @@ class _ProfilePageState extends State<ProfilePage> {
   // String _myActivity;
   // String _myActivityResult;
   final formKey = new GlobalKey<FormState>();
-  final length = Firestore.instance.collection('profile').snapshots().length.toString();
+  // final length = Firestore.instance.collection('profile').snapshots();
+  var profile;
 
   @override
   void initState() {
+    crudObj.getProfile().then((results) {
+      setState(() {
+        profile = results;
+      });
+    });
     super.initState();
     // _myActivity = '';
     // _myActivityResult = '';
@@ -40,16 +51,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Align(
-      alignment: Alignment.center,
-      child: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            _createProfile(),
-          ],
-        ),
-      ),
-    );
+    Size size = MediaQuery.of(context).size;
+    return new StreamProvider<List<ProfileDetails>>.value(
+        value: Profile().profile,
+        child: Align(
+          alignment: Alignment.center,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                // _showProfile(),
+                _createProfile(),
+              ],
+            ),
+          ),
+        ));
   }
 
   Future<bool> dialogTrigger(BuildContext context) async {
@@ -82,6 +97,69 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           );
         });
+  }
+
+  Widget _showProfile() {
+    if (profile != null) {
+      return StreamBuilder(
+        stream: profile,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            return ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              padding: EdgeInsets.all(10.0),
+              itemBuilder: (context, i) {
+                return Card(
+                    elevation: 5.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: Container(
+                      padding:
+                          EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [
+                            Theme.Colors.loginGradientStart,
+                            Theme.Colors.loginGradientEnd
+                          ],
+                        ),
+                      ),
+                      child: new ListTile(
+                        leading: CircleAvatar(
+                          radius: 30.0,
+                          backgroundColor: Colors.brown[300],
+                          backgroundImage: AssetImage('assets/glass.png'),
+                        ),
+                        title: Text(
+                          '\n Tracking No.:${snapshot.data.documents[i].data['fullNames']}',
+                          style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          '\nDescription: ${snapshot.data.documents[i].data['email']} \nFrom: ${snapshot.data.documents[i].data['phone']} \nStatus: ${snapshot.data.documents[i].data['address']}\n',
+                          style:
+                              TextStyle(fontFamily: 'Spectral', fontSize: 20.0),
+                        ),
+                      ),
+                    ));
+              },
+            );
+          } else {
+            return Center(
+                child: Text(
+              "Welcome. Your Profile is Loading....",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 30.0),
+            ));
+          }
+        },
+      );
+    }
   }
 
   Widget _createProfile() {

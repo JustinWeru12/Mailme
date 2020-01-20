@@ -31,7 +31,7 @@ class CrudMethods {
     return await Firestore.instance.collection('letters').snapshots();
   }
   getProfile() async{
-    return await Firestore.instance.collection('profile').getDocuments();
+    return await Firestore.instance.collection('profile').snapshots();
   }
   updateData(selectedDoc, newValues){
     Firestore.instance

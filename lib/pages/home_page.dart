@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/models/letter.dart';
 import 'package:mailman/models/letterdetails.dart';
 import 'package:mailman/services/authentication.dart';
@@ -70,7 +69,7 @@ class _HomePageState extends State<HomePage>
           appBar: new AppBar(
             backgroundColor: Colors.blueGrey[800],
             title: Center(
-              child: new Text('\t\t\t\tMailman'),
+              child: new Text('\t\t\t\t\t\t\t\t\t\tMailman'),
             ),
             textTheme: TextTheme(
               title: TextStyle(
