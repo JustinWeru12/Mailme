@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage>
   String sBox;
   String dBox;
   String status;
+  DateTime sDate;
   var letters;
 
   CrudMethods crudObj = new CrudMethods();
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage>
         length: 4,
         child: Scaffold(
           appBar: new AppBar(
-            backgroundColor: Colors.blueGrey[800],
+            backgroundColor: Colors.deepOrange,
             title: Center(
               child: new Text('\t\t\t\t\t\t\t\t\t\tMailman'),
             ),
@@ -234,7 +235,7 @@ class _HomePageState extends State<HomePage>
                                 fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                            '\nDescription: ${snapshot.data.documents[i].data['description']} \nFrom: ${snapshot.data.documents[i].data['source Box']} \nStatus: ${snapshot.data.documents[i].data['status']}\n',
+                            '\nDescription: ${snapshot.data.documents[i].data['description']} \nFrom: ${snapshot.data.documents[i].data['source Box']} \nStatus: ${snapshot.data.documents[i].data['status']}\n On: ${snapshot.data.documents[i].data['sDate']}\n',
                             style: TextStyle(
                                 fontFamily: 'Spectral', fontSize: 20.0),
                           ),
@@ -246,16 +247,15 @@ class _HomePageState extends State<HomePage>
                       ));
                 },
               );
-            }else {
-      return Center(
-          child: Text(
-        "Welcome. Your list is Loading....",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 30.0),
-      ));
-    }
-  }
-);
+            } else {
+              return Center(
+                  child: Text(
+                "Welcome. Your list is Loading....",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30.0),
+              ));
+            }
+          });
     } else {
       return Center(
           child: Text(
@@ -313,7 +313,11 @@ class _HomePageState extends State<HomePage>
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
-            title: Text('Update Data', style: TextStyle(fontSize: 25.0),textAlign: TextAlign.center,),
+            title: Text(
+              'Update Data',
+              style: TextStyle(fontSize: 25.0),
+              textAlign: TextAlign.center,
+            ),
             content: Container(
               height: 100.0,
               width: 150.0,
@@ -322,54 +326,57 @@ class _HomePageState extends State<HomePage>
                 children: <Widget>[
                   SizedBox(height: 5.0),
                   Container(
-                        padding:
-                            EdgeInsets.only(left: 15.0, right: 10.0, top: 0.0),
-                        child: DropDownFormField(
-                          titleText: 'Select Status',
-                          hintText: 'Please choose one',
-                          validator: (value) {
-                            if (value == null) {
-                              return "Select the letter Status";
-                            }
-                            return null;
+                      padding:
+                          EdgeInsets.only(left: 15.0, right: 10.0, top: 0.0),
+                      child: DropDownFormField(
+                        titleText: 'Select Status',
+                        hintText: 'Please choose one',
+                        validator: (value) {
+                          if (value == null) {
+                            return "Select the letter Status";
+                          }
+                          return null;
+                        },
+                        value: status,
+                        onSaved: (value) {
+                          setState(() {
+                            status = value;
+                          });
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            status = value;
+                          });
+                        },
+                        dataSource: [
+                          {
+                            "display": "Posted",
+                            "value": "Posted",
                           },
-                          value: status,
-                          onSaved: (value) {
-                            setState(() {
-                              status = value;
-                            });
+                          {
+                            "display": "Dispatched",
+                            "value": "Dispatched",
                           },
-                          onChanged: (value) {
-                            setState(() {
-                              status = value;
-                            });
-                          },
-                          dataSource: [
-                            {
-                              "display": "Posted",
-                              "value": "Posted",
-                            },
-                            {
-                              "display": "Dispatched",
-                              "value": "Dispatched",
-                            },
-                            {"display": "Received", "value": "Received"}
-                          ],
-                          textField: 'display',
-                          valueField: 'value',
-                        )),
+                          {"display": "Received", "value": "Received"}
+                        ],
+                        textField: 'display',
+                        valueField: 'value',
+                      )),
                 ],
               ),
             ),
             actions: <Widget>[
               FlatButton(
-                child: Text('Update',style: TextStyle(fontFamily: 'Spectral',fontSize: 25.0),),
+                child: Text(
+                  'Update',
+                  style: TextStyle(fontFamily: 'Spectral', fontSize: 25.0),
+                ),
                 textColor: Colors.blue,
                 onPressed: () {
                   Navigator.of(context).pop();
-                  crudObj.updateData(selectedDoc, {'status': this.status}).then(
+                  crudObj.updateData(selectedDoc, {'status': this.status, 'sDate': DateTime.now().toString()}).then(
                       (result) {
-                        formKey.currentState.reset();
+                    formKey.currentState.reset();
                     // dialogTrigger(context);
                   }).catchError((e) {
                     print(e);

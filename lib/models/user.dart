@@ -9,7 +9,8 @@ class UserData{
   final String sBox;
   final String dBox;
   final String status;
+  final String sDate;
 
-  UserData({this.userId, this.trackingNo, this.description, this.sBox, this.dBox, this.status});
+  UserData({this.userId, this.trackingNo, this.description, this.sBox, this.dBox, this.status, this.sDate});
 
 }

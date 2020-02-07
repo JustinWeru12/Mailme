@@ -100,7 +100,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _showProfile() {
-    if (profile != null) {
       return StreamBuilder(
         stream: profile,
         builder: (context, snapshot) {
@@ -160,7 +159,6 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       );
     }
-  }
 
   Widget _createProfile() {
     return new Card(

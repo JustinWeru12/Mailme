@@ -17,6 +17,7 @@ class _LetterPageState extends State<LetterPage> {
   String status;
   TextEditingController sBox = TextEditingController();
   TextEditingController dBox = TextEditingController();
+  DateTime sDate ;
   TextEditingController description = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
   // String _myActivityResult;
@@ -307,7 +308,8 @@ class _LetterPageState extends State<LetterPage> {
                                 'description': description.text.toString(),
                                 'destination Box': dBox.text.toString(),
                                 'source Box': sBox.text.toString(),
-                                'status': this.status
+                                'status': this.status,
+                                'sDate' : DateTime.now().toString()
                               }).then((result) {
                                 dialogTrigger(context);
                                 trackingNo.text = '';

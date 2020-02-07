@@ -18,6 +18,7 @@ class Letter {
     String dBox,
     String status,
     String userId,
+    String sDate,
   ) async {
     return await lettersCollection.document(userId).setData({
       'trackingNo': trackingNo,
@@ -25,6 +26,7 @@ class Letter {
       'sBox': sBox,
       'dBox': dBox,
       'status': status,
+      'sDate': sDate,
     });
   }
 
@@ -35,7 +37,8 @@ class Letter {
           description: doc.data["description"] ?? '',
           sBox: doc.data["sBox"] ?? '',
           dBox: doc.data["dBox"] ?? '',
-          status: doc.data["status"] ?? '');
+          status: doc.data["status"] ?? '', 
+          sDate: doc.data["sDate"] ?? '');
     }).toList();
   }
 
@@ -46,7 +49,8 @@ class Letter {
         description: snapshot.data["description"],
         sBox: snapshot.data["sBox"],
         dBox: snapshot.data["dBox"],
-        status: snapshot.data["status"]);
+        status: snapshot.data["status"],
+        sDate: snapshot.data["sDate"]);
   }
 
   Stream<List<LetterDetails>> get letters {

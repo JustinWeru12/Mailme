@@ -4,7 +4,8 @@ class LetterDetails{
   final String sBox;
   final String dBox;
   final String status;
+  final String sDate;
 
-  LetterDetails({this.trackingNo, this.description, this.sBox, this.dBox, this.status});
+  LetterDetails({this.trackingNo, this.description, this.sBox, this.dBox, this.status, this.sDate});
 
 }
