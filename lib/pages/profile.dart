@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mailman/models/profiledetails.dart';
-import 'package:mailman/pages/profile_list.dart';
 import 'package:mailman/style/theme.dart' as Theme;
 import 'package:mailman/models/crud.dart';
 import 'package:provider/provider.dart';
@@ -51,20 +49,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return new StreamProvider<List<ProfileDetails>>.value(
-        value: Profile().profile,
-        child: Align(
-          alignment: Alignment.center,
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                // _showProfile(),
-                _createProfile(),
-              ],
-            ),
-          ),
-        ));
+    return Align(
+      alignment: Alignment.center,
+      child: Column(
+        children: <Widget>[
+          _showProfile(),
+          // _createProfile()
+          ],
+      ),
+    );
   }
 
   Future<bool> dialogTrigger(BuildContext context) async {
@@ -100,23 +93,28 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _showProfile() {
+    if (profile != null) {
       return StreamBuilder(
         stream: profile,
         builder: (context, snapshot) {
-          if (snapshot.data != null) {
+          if (snapshot.hasData) {
             return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
               itemCount: snapshot.data.documents.length,
               padding: EdgeInsets.all(10.0),
               itemBuilder: (context, i) {
                 return Card(
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
+                        borderRadius: BorderRadius.only(topLeft:  const  Radius.circular(20.0),
+                            topRight: const  Radius.circular(20.0))),
                     child: Container(
                       padding:
                           EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.only(topLeft:  const  Radius.circular(20.0),
+                            topRight: const  Radius.circular(20.0)),
                         gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
@@ -133,16 +131,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           backgroundImage: AssetImage('assets/glass.png'),
                         ),
                         title: Text(
-                          '\n Tracking No.:${snapshot.data.documents[i].data['fullNames']}',
+                          '\n Username:\n\t\t\t\t\t${snapshot.data.documents[i].data['fullNames']}',
                           style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 25.0,
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                          '\nDescription: ${snapshot.data.documents[i].data['email']} \nFrom: ${snapshot.data.documents[i].data['phone']} \nStatus: ${snapshot.data.documents[i].data['address']}\n',
+                          '\nEmail Address:\n\t\t\t\t${snapshot.data.documents[i].data['email']}\n Phone:\n\t\t\t\t\ ${snapshot.data.documents[i].data['phone']} \n Address: \n\t\t\t\t${snapshot.data.documents[i].data['address']}\n',
                           style:
-                              TextStyle(fontFamily: 'Spectral', fontSize: 20.0),
+                              TextStyle(fontFamily: 'Spectral', fontSize: 20.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ));
@@ -159,266 +157,278 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       );
     }
+  }
+
+  Widget _fixer() {
+    if (profile != null) {
+      _showProfile();
+    } else {
+      _createProfile();
+    }
+  }
 
   Widget _createProfile() {
-    return new Card(
-      elevation: 5.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      child: Container(
-        padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Theme.Colors.loginGradientStart,
-              Theme.Colors.loginGradientEnd
-            ],
+    return Center(
+      child: new Card(
+        elevation: 5.0,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: Container(
+          padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Theme.Colors.loginGradientStart,
+                Theme.Colors.loginGradientEnd
+              ],
+            ),
           ),
-        ),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 25.0,
-              ),
-              Text(
-                "Create a Profile",
-                style:
-                    TextStyle(fontSize: 30.0, fontFamily: 'WorkSansSemiBold'),
-              ),
-              SizedBox(height: 25.0),
-              TextFormField(
-                style: TextStyle(
-                    fontFamily: "WorkSansSemiBold",
-                    fontSize: 16.0,
-                    color: Colors.black),
-                autofocus: false,
-                decoration: new InputDecoration(
-                  labelText: 'Full Names.',
-                  hintText: 'John Doe',
-                  hintStyle: TextStyle(
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 25.0,
+                ),
+                Text(
+                  "Create a Profile",
+                  style:
+                      TextStyle(fontSize: 30.0, fontFamily: 'WorkSansSemiBold'),
+                ),
+                SizedBox(height: 25.0),
+                TextFormField(
+                  style: TextStyle(
                       fontFamily: "WorkSansSemiBold",
-                      fontSize: 17.0,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey),
-                  icon: new Icon(
-                    FontAwesomeIcons.solidUser,
-                    color: Colors.blue,
+                      fontSize: 16.0,
+                      color: Colors.black),
+                  autofocus: false,
+                  decoration: new InputDecoration(
+                    labelText: 'Full Names.',
+                    hintText: 'John Doe',
+                    hintStyle: TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 17.0,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey),
+                    icon: new Icon(
+                      FontAwesomeIcons.solidUser,
+                      color: Colors.blue,
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
                   ),
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  controller: fullNames,
+                  validator: (value) {
+                    if (!value.contains(' ')) {
+                      return 'Please enter a valid Name';
+                    }
+                    return null;
+                  },
                 ),
-                controller: fullNames,
-                validator: (value) {
-                  if (!value.contains(' ')) {
-                    return 'Please enter a valid Name';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              TextFormField(
-                style: TextStyle(
-                    fontFamily: "WorkSansSemiBold",
-                    fontSize: 16.0,
-                    color: Colors.black),
-                autofocus: false,
-                decoration: new InputDecoration(
-                  labelText: 'Email.',
-                  hintText: 'name@example.com',
-                  hintStyle: TextStyle(
+                SizedBox(
+                  height: 25.0,
+                ),
+                TextFormField(
+                  style: TextStyle(
                       fontFamily: "WorkSansSemiBold",
-                      fontSize: 17.0,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey),
-                  icon: new Icon(
-                    FontAwesomeIcons.at,
-                    color: Colors.blue,
+                      fontSize: 16.0,
+                      color: Colors.black),
+                  autofocus: false,
+                  decoration: new InputDecoration(
+                    labelText: 'Email.',
+                    hintText: 'name@example.com',
+                    hintStyle: TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 17.0,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey),
+                    icon: new Icon(
+                      FontAwesomeIcons.at,
+                      color: Colors.blue,
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
                   ),
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  controller: email,
+                  validator: (value) {
+                    if (!value.contains('@')) {
+                      return 'Please enter a valid Email';
+                    }
+                    return null;
+                  },
                 ),
-                controller: email,
-                validator: (value) {
-                  if (!value.contains('@')) {
-                    return 'Please enter a valid Email';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              TextFormField(
-                style: TextStyle(
-                    fontFamily: "WorkSansSemiBold",
-                    fontSize: 16.0,
-                    color: Colors.black),
-                autofocus: false,
-                decoration: new InputDecoration(
-                  labelText: 'Phone No.',
-                  hintText: '+254712345678',
-                  hintStyle: TextStyle(
+                SizedBox(
+                  height: 25.0,
+                ),
+                TextFormField(
+                  style: TextStyle(
                       fontFamily: "WorkSansSemiBold",
-                      fontSize: 17.0,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey),
-                  icon: new Icon(
-                    FontAwesomeIcons.solidAddressBook,
-                    color: Colors.blue,
+                      fontSize: 16.0,
+                      color: Colors.black),
+                  autofocus: false,
+                  decoration: new InputDecoration(
+                    labelText: 'Phone No.',
+                    hintText: '+254712345678',
+                    hintStyle: TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 17.0,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey),
+                    icon: new Icon(
+                      FontAwesomeIcons.solidAddressBook,
+                      color: Colors.blue,
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
                   ),
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  controller: phone,
+                  validator: (value) {
+                    if (!(value.startsWith('+254'))) {
+                      return 'Please enter a valid phone Number';
+                    }
+                    return null;
+                  },
                 ),
-                controller: phone,
-                validator: (value) {
-                  if (!(value.startsWith('+254'))) {
-                    return 'Please enter a valid phone Number';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              TextFormField(
-                style: TextStyle(
-                    fontFamily: "WorkSansSemiBold",
-                    fontSize: 16.0,
-                    color: Colors.black),
-                autofocus: false,
-                decoration: new InputDecoration(
-                  labelText: 'Age.',
-                  hintStyle:
-                      TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                  icon: new Icon(
-                    FontAwesomeIcons.githubAlt,
-                    color: Colors.blue,
-                  ),
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
-                  ),
+                SizedBox(
+                  height: 25.0,
                 ),
-                controller: age,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Age is Required';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              TextFormField(
-                style: TextStyle(
-                    fontFamily: "WorkSansSemiBold",
-                    fontSize: 16.0,
-                    color: Colors.black),
-                autofocus: false,
-                decoration: new InputDecoration(
-                  labelText: 'Address.',
-                  hintText: '123-12345',
-                  hintStyle: TextStyle(
-                      fontFamily: "Roboto",
-                      fontSize: 17.0,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey),
-                  icon: new Icon(
-                    FontAwesomeIcons.solidEnvelopeOpen,
-                    color: Colors.blue,
+                TextFormField(
+                  style: TextStyle(
+                      fontFamily: "WorkSansSemiBold",
+                      fontSize: 16.0,
+                      color: Colors.black),
+                  autofocus: false,
+                  decoration: new InputDecoration(
+                    labelText: 'Age.',
+                    hintStyle: TextStyle(
+                        fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                    icon: new Icon(
+                      FontAwesomeIcons.githubAlt,
+                      color: Colors.blue,
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
                   ),
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
-                  ),
+                  controller: age,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Age is Required';
+                    }
+                    return null;
+                  },
                 ),
-                controller: address,
-                validator: (value) {
-                  if (!value.contains('-')) {
-                    return 'Please enter a valid Address';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
-              // TextFormField(
-              //   style: TextStyle(
-              //       fontFamily: "WorkSansSemiBold",
-              //       fontSize: 16.0,
-              //       color: Colors.black),
-              //   autofocus: false,
-              //   decoration: new InputDecoration(
-              //     labelText: 'Postal Code.',
-              //     hintStyle: TextStyle(
-              //         fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-              //     icon: new Icon(
-              //       FontAwesomeIcons.boxOpen,
-              //       color: Colors.blue,
-              //     ),
-              //     border: new OutlineInputBorder(
-              //       borderRadius: new BorderRadius.circular(25.0),
-              //       borderSide: new BorderSide(),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 25.0,
-              // ),
-              RaisedButton(
-                elevation: 5.0,
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0)),
-                color: Colors.blue,
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    // Navigator.of(context).pop();
-                    crudObj.addData({
-                      'fullNames': fullNames.text.toString(),
-                      'email': email.text.toString(),
-                      'phone': phone.text.toString(),
-                      'age': age.text.toString(),
-                      'address': address.text.toString()
-                    }).then((result) {
-                      dialogTrigger(context);
-                      fullNames.text = '';
-                      email.text = '';
-                      phone.text = '';
-                      age.text = '';
-                      address.text = '';
-                    }).catchError((e) {
-                      print(e);
-                    });
-                  }
-                },
-                child: const Text('SUBMIT',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Roboto',
+                SizedBox(
+                  height: 25.0,
+                ),
+                TextFormField(
+                  style: TextStyle(
+                      fontFamily: "WorkSansSemiBold",
+                      fontSize: 16.0,
+                      color: Colors.black),
+                  autofocus: false,
+                  decoration: new InputDecoration(
+                    labelText: 'Address.',
+                    hintText: '123-12345',
+                    hintStyle: TextStyle(
+                        fontFamily: "Roboto",
+                        fontSize: 17.0,
+                        fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic)),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-            ],
+                        color: Colors.grey),
+                    icon: new Icon(
+                      FontAwesomeIcons.solidEnvelopeOpen,
+                      color: Colors.blue,
+                    ),
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    ),
+                  ),
+                  controller: address,
+                  validator: (value) {
+                    if (!value.contains('-')) {
+                      return 'Please enter a valid Address';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 25.0,
+                ),
+                // TextFormField(
+                //   style: TextStyle(
+                //       fontFamily: "WorkSansSemiBold",
+                //       fontSize: 16.0,
+                //       color: Colors.black),
+                //   autofocus: false,
+                //   decoration: new InputDecoration(
+                //     labelText: 'Postal Code.',
+                //     hintStyle: TextStyle(
+                //         fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                //     icon: new Icon(
+                //       FontAwesomeIcons.boxOpen,
+                //       color: Colors.blue,
+                //     ),
+                //     border: new OutlineInputBorder(
+                //       borderRadius: new BorderRadius.circular(25.0),
+                //       borderSide: new BorderSide(),
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 25.0,
+                // ),
+                RaisedButton(
+                  elevation: 5.0,
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0)),
+                  color: Colors.blue,
+                  onPressed: () {
+                    if (formKey.currentState.validate()) {
+                      // Navigator.of(context).pop();
+                      crudObj.addData({
+                        'fullNames': fullNames.text.toString(),
+                        'email': email.text.toString(),
+                        'phone': phone.text.toString(),
+                        'age': age.text.toString(),
+                        'address': address.text.toString()
+                      }).then((result) {
+                        dialogTrigger(context);
+                        fullNames.text = '';
+                        email.text = '';
+                        phone.text = '';
+                        age.text = '';
+                        address.text = '';
+                      }).catchError((e) {
+                        print(e);
+                      });
+                    }
+                  },
+                  child: const Text('SUBMIT',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic)),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+              ],
+            ),
           ),
         ),
       ),

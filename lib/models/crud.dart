@@ -28,7 +28,7 @@ class CrudMethods {
   }
 
   getData() async{
-    return await Firestore.instance.collection('letters').snapshots();
+    return await Firestore.instance.collection('letters').where("status", isEqualTo: "Received").snapshots();
   }
   getProfile() async{
     return await Firestore.instance.collection('profile').snapshots();

@@ -18,6 +18,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
   final _formKey = new GlobalKey<FormState>();
 
   String _email;
+  String _name;
   String _password;
   String _errorMessage;
 
@@ -44,10 +45,10 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
       String userId = "";
       try {
         if (_isLoginForm) {
-          userId = await widget.auth.signIn(_email, _password);
+          userId = await widget.auth.signIn(_email, _password, _name);
           print('Signed in: $userId');
         } else {
-          userId = await widget.auth.signUp(_email, _password);
+          userId = await widget.auth.signUp(_email, _password, _name);
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
@@ -193,6 +194,7 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
                 shrinkWrap: true,
                 children: <Widget>[
                   showLogo(),
+                  showNameinput(),
                   showEmailInput(),
                   showPasswordInput(),
                   showPrimaryButton(),
@@ -234,6 +236,31 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
           radius: 48.0,
           child: Image.asset('assets/login_logo.png'),
         ),
+      ),
+    );
+  }
+  Widget showNameinput() {
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+      child: new TextFormField(
+        maxLines: 1,
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(
+            fontFamily: "WorkSansSemiBold",
+            fontSize: 16.0,
+            color: Colors.black),
+        autofocus: false,
+        decoration: new InputDecoration(
+            hintText: 'Full Names',
+            hintStyle:
+                TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+            icon: new Icon(
+              FontAwesomeIcons.envelope,
+              color: Colors.grey,
+            )),
+        validator: (value) => value.isEmpty ? 'Please Enter Your Full Names' : null,
+        onSaved: (value) => _name = value.trim(),
       ),
     );
   }

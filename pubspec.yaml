@@ -8,6 +8,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   cloud_firestore: ^0.12.10
   firebase_core: ^0.4.1+4
+  google_sign_in: ^4.0.4
+  apple_sign_in: ^0.1.0
   provider: ^3.1.0+1
   get_it: ^3.0.3
   firebase_auth: ^0.14.0+5
@@ -19,6 +21,14 @@ dependencies:
   url_launcher:
   pull_to_refresh: ^1.5.7
   flutter_email_sender: ^2.2.0
+  intl: 0.15.7
+  date_range_picker: ^1.0.3
+  auto_size_text: ^2.0.2
+  flutter_auth_buttons: ^0.5.0
+  dio: ^2.1.13
+  uuid: 2.0.1
+  # device_info: ^0.4.1+4
+  google_fonts: ^0.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

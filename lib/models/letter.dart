@@ -54,7 +54,7 @@ class Letter {
   }
 
   Stream<List<LetterDetails>> get letters {
-    return lettersCollection.snapshots().map(_letterListFromSnapshot);
+    return lettersCollection.where("sBox", isEqualTo: "gf").snapshots().map(_letterListFromSnapshot);
   }
 
   Stream<UserData> get userData{
