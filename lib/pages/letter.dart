@@ -17,7 +17,9 @@ class _LetterPageState extends State<LetterPage> {
   String status;
   TextEditingController sBox = TextEditingController();
   TextEditingController dBox = TextEditingController();
-  DateTime sDate ;
+  TextEditingController dPostalCode = TextEditingController();
+  DateTime sDate;
+  
   TextEditingController description = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
   // String _myActivityResult;
@@ -255,46 +257,76 @@ class _LetterPageState extends State<LetterPage> {
                         SizedBox(
                           height: 25.0,
                         ),
-                        Container(
-                            padding: EdgeInsets.only(
-                                left: 45.0, right: 10.0, top: 0.0),
-                            child: DropDownFormField(
-                              titleText: 'Select Status',
-                              hintText: 'Please choose one',
-                              validator: (value) {
-                                if (value == null) {
-                                  return "Select the letter Status";
-                                }
-                                return null;
-                              },
-                              value: status,
-                              onSaved: (value) {
-                                setState(() {
-                                  status = value;
-                                });
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  status = value;
-                                });
-                              },
-                              dataSource: [
-                                {
-                                  "display": "Posted",
-                                  "value": "Posted",
-                                },
-                                {
-                                  "display": "Dispatched",
-                                  "value": "Dispatched",
-                                },
-                                {"display": "Received", "value": "Received"}
-                              ],
-                              textField: 'display',
-                              valueField: 'value',
-                            )),
+                        TextFormField(
+                          style: TextStyle(
+                              fontFamily: "WorkSansSemiBold",
+                              fontSize: 16.0,
+                              color: Colors.black),
+                          autofocus: false,
+                          decoration: new InputDecoration(
+                            labelText: 'Destination Postal Code.',
+                            hintStyle: TextStyle(
+                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                            icon: new Icon(
+                              FontAwesomeIcons.box,
+                              color: Colors.blue,
+                            ),
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Please add the destination postal code';
+                            }
+                            return null;
+                          },
+                          controller: dPostalCode,
+                        ),
                         SizedBox(
                           height: 25.0,
                         ),
+                        // Container(
+                        //     padding: EdgeInsets.only(
+                        //         left: 45.0, right: 10.0, top: 0.0),
+                        //     child: DropDownFormField(
+                        //       titleText: 'Select Status',
+                        //       hintText: 'Please choose one',
+                        //       validator: (value) {
+                        //         if (value == null) {
+                        //           return "Select the letter Status";
+                        //         }
+                        //         return null;
+                        //       },
+                        //       value: status,
+                        //       onSaved: (value) {
+                        //         setState(() {
+                        //           status = value;
+                        //         });
+                        //       },
+                        //       onChanged: (value) {
+                        //         setState(() {
+                        //           status = value;
+                        //         });
+                        //       },
+                        //       dataSource: [
+                        //         {
+                        //           "display": "Posted",
+                        //           "value": "Posted",
+                        //         },
+                        //         {
+                        //           "display": "Dispatched",
+                        //           "value": "Dispatched",
+                        //         },
+                        //         {"display": "Received", "value": "Received"}
+                        //       ],
+                        //       textField: 'display',
+                        //       valueField: 'value',
+                        //     )),
+                        // SizedBox(
+                        //   height: 25.0,
+                        // ),
                         RaisedButton(
                           elevation: 5.0,
                           shape: new RoundedRectangleBorder(
@@ -308,14 +340,17 @@ class _LetterPageState extends State<LetterPage> {
                                 'description': description.text.toString(),
                                 'destination Box': dBox.text.toString(),
                                 'source Box': sBox.text.toString(),
-                                'status': this.status,
-                                'sDate' : DateTime.now().toString()
+                                'status': 'Posted',
+                                'destination Postal Code':
+                                    dPostalCode.text.toString(),
+                                'sDate': DateTime.now().toString()
                               }).then((result) {
                                 dialogTrigger(context);
                                 trackingNo.text = '';
                                 description.text = '';
                                 dBox.text = '';
                                 sBox.text = '';
+                                dPostalCode.text = '';
                               }).catchError((e) {
                                 print(e);
                               });
@@ -349,6 +384,7 @@ class _LetterPageState extends State<LetterPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
+             backgroundColor: Theme.Colors.loginGradientStart,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),

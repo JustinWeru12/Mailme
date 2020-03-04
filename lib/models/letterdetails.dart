@@ -5,7 +5,9 @@ class LetterDetails{
   final String dBox;
   final String status;
   final String sDate;
+  final String dPostalCode;
+  final String sPostalCode;
 
-  LetterDetails({this.trackingNo, this.description, this.sBox, this.dBox, this.status, this.sDate});
+  LetterDetails({this.trackingNo, this.description, this.sBox, this.dBox, this.status, this.sDate,this.dPostalCode,this.sPostalCode});
 
 }

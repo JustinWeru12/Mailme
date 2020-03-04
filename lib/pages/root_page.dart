@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mailman/pages/login_signup_page.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:mailman/pages/home_page.dart';
+import 'package:mailman/models/crud.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,
@@ -20,7 +21,8 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  String _userId = "";
+  String _userId;
+  CrudMethods crudObj = new CrudMethods();
 
   @override
   void initState() {
@@ -43,7 +45,9 @@ class _RootPageState extends State<RootPage> {
       });
     });
     setState(() {
-      authStatus = AuthStatus.LOGGED_IN;
+      crudObj.getDataFromUserFromDocument().then((value) {
+        authStatus = AuthStatus.LOGGED_IN;
+      });
     });
   }
 
@@ -70,9 +74,10 @@ class _RootPageState extends State<RootPage> {
         return buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return new LoginSignupPage(
+        return new LoginSignUpPage(
           auth: widget.auth,
           loginCallback: loginCallback,
+          title: "Mailman",
         );
         break;
       case AuthStatus.LOGGED_IN:

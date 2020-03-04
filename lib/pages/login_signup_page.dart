@@ -1,30 +1,46 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mailman/services/authentication.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mailman/style/theme.dart' as Theme;
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mailman/models/user.dart';
+import 'package:mailman/models/crud.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:mailman/models/primary_button.dart';
 
-class LoginSignupPage extends StatefulWidget {
-  LoginSignupPage({this.auth, this.loginCallback});
+class LoginSignUpPage extends StatefulWidget {
+  LoginSignUpPage({Key key, this.auth, this.loginCallback, this.title})
+      : super(key: key);
 
+  final String title;
   final BaseAuth auth;
   final VoidCallback loginCallback;
-
   @override
-  State<StatefulWidget> createState() => new _LoginSignupPageState();
+  _LoginSignUpPageState createState() => _LoginSignUpPageState();
 }
 
-class _LoginSignupPageState extends State<LoginSignupPage> {
-  final _formKey = new GlobalKey<FormState>();
+enum FormType { login, register }
 
+class _LoginSignUpPageState extends State<LoginSignUpPage>
+    with TickerProviderStateMixin {
+  static final _formKey = new GlobalKey<FormState>();
+  final TextEditingController _passwordTextController = TextEditingController();
+  CrudMethods crudObj = new CrudMethods();
   String _email;
-  String _name;
+  String _fullNames;
+  DateTime dob;
+  File picture;
+  // String _address;
+  // String _postalCode;
+  String _authHint = '';
+  FormType _formType = FormType.login;
   String _password;
-  String _errorMessage;
+  // String _errorMessage;
 
-  bool _isLoginForm;
+  // bool _isLoginForm;
   bool _isLoading;
-
+  Color dobColor = Colors.blue[800];
   // Check if form is valid before perform login or signup
   bool validateAndSave() {
     final form = _formKey.currentState;
@@ -37,309 +53,406 @@ class _LoginSignupPageState extends State<LoginSignupPage> {
 
   // Perform login or signup
   void validateAndSubmit() async {
-    setState(() {
-      _errorMessage = "";
-      _isLoading = true;
-    });
     if (validateAndSave()) {
-      String userId = "";
+      setState(() {
+        _isLoading = true;
+      });
       try {
-        if (_isLoginForm) {
-          userId = await widget.auth.signIn(_email, _password, _name);
-          print('Signed in: $userId');
-        } else {
-          userId = await widget.auth.signUp(_email, _password, _name);
-          //widget.auth.sendEmailVerification();
-          //_showVerifyEmailSentDialog();
-          print('Signed up user: $userId');
-        }
+        String userId = _formType == FormType.login
+            ? await widget.auth.signIn(_email, _password)
+            : await widget.auth.signUp(_email, _password);
         setState(() {
           _isLoading = false;
         });
+        if (_formType == FormType.register) {
+          UserData userData = new UserData(
+            fullNames: _fullNames,
+            email: _email,
+            phone: "",
+            picture: "https://firebasestorage.googleapis.com/v0/b/lynight-53310.appspot.com/o/profilePics%2Fbloon_pics.jpg?alt=media&token=ab6c1537-9b1c-4cb4-b9d6-2e5fa9c7cb46",
+            address: "",
+            postalCode: "",
+            dob: dob,
+          );
+          crudObj.createOrUpdateUserData(userData.getDataMap());
+        }
 
-        if (userId.length > 0 && userId != null && _isLoginForm) {
+        if (userId == null) {
+          print("EMAIL NOT VERIFIED");
+          setState(() {
+            _authHint = 'Check your email 🙂';
+            _isLoading = false;
+            _formType = FormType.login;
+          });
+        } else {
+          _isLoading = false;
           widget.loginCallback();
         }
       } catch (e) {
-        print('Error: $e');
         setState(() {
           _isLoading = false;
-          _errorMessage = e.message;
-          _formKey.currentState.reset();
+          _authHint = 'connection error\n\n${e.toString()}';
         });
+        print(e);
       }
+    } else {
+      setState(() {
+        _authHint = '';
+      });
     }
   }
 
-  @override
-  void initState() {
-    _errorMessage = "";
-    _isLoading = false;
-    _isLoginForm = true;
-    super.initState();
-  }
-
-  void resetForm() {
+  void moveToRegister() {
     _formKey.currentState.reset();
-    _errorMessage = "";
+    setState(() {
+      _formType = FormType.register;
+      _authHint = '';
+    });
   }
 
-  void toggleFormMode() {
-    resetForm();
+  void moveToLogin() {
+    _formKey.currentState.reset();
     setState(() {
-      _isLoginForm = !_isLoginForm;
+      _formType = FormType.login;
+      _authHint = '';
     });
+  }
+
+  Widget _buildEmailField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+      child: TextFormField(
+        maxLines: 1,
+        key: new Key('email'),
+        decoration: InputDecoration(
+          labelText: 'Email',
+          icon: new Icon(
+            Icons.mail,
+            color: Colors.blue,
+          ),
+          border: new OutlineInputBorder(
+            borderRadius: new BorderRadius.circular(15.0),
+            borderSide: new BorderSide(),
+          ),
+        ),
+        keyboardType: TextInputType.emailAddress,
+        validator: (String value) {
+          if (value.isEmpty ||
+              !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                  .hasMatch(value)) {
+            return 'Enter a valid email';
+          }
+        },
+        onSaved: (value) => _email = value,
+      ),
+    );
+  }
+
+  Widget _buildNameField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: TextFormField(
+        maxLines: 1,
+        key: new Key('namefield'),
+        decoration: InputDecoration(
+          labelText: 'Full Name',
+          icon: new Icon(
+            Icons.perm_identity,
+            color: Colors.blue,
+          ),
+          border: new OutlineInputBorder(
+            borderRadius: new BorderRadius.circular(15.0),
+            borderSide: new BorderSide(),
+          ),
+        ),
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'Enter your Name';
+          }
+        },
+        onSaved: (value) => _fullNames = value,
+      ),
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: TextFormField(
+        maxLines: 1,
+        key: new Key('password'),
+        decoration: InputDecoration(
+          labelText: 'Password',
+          icon: new Icon(
+            Icons.lock,
+            color: Colors.blue,
+          ),
+          border: new OutlineInputBorder(
+            borderRadius: new BorderRadius.circular(15.0),
+            borderSide: new BorderSide(),
+          ),
+        ),
+        controller: _passwordTextController,
+        obscureText: true,
+        validator: (String value) {
+          if (value.isEmpty || value.length < 6) {
+            return 'Enter a minimum of 6 characters';
+          }
+        },
+        onSaved: (value) => _password = value,
+      ),
+    );
+  }
+
+  Widget _builConfirmPasswordTextField() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: 'Confirm Password',
+          icon: new Icon(
+            Icons.lock,
+            color: Colors.blue,
+          ),
+          border: new OutlineInputBorder(
+            borderRadius: new BorderRadius.circular(15.0),
+            borderSide: new BorderSide(),
+          ),
+        ),
+        obscureText: true,
+        validator: (String value) {
+          if (_passwordTextController.text != value) {
+            return 'Passwords don\'t correspond';
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _showDatePicker() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.date_range,
+            color: Colors.blue,
+          ),
+          FlatButton(
+            onPressed: () {
+              DatePicker.showDatePicker(
+                context,
+                showTitleActions: true,
+                minTime: DateTime(1968, 1, 1),
+                maxTime: DateTime(2002, 3, 7),
+                onConfirm: (date) {
+                  setState(() {
+                    dob = date;
+                    dobColor = Colors.blue[600];
+                  });
+                },
+                currentTime: DateTime.now(),
+                locale: LocaleType.en,
+              );
+            },
+            child: Text(
+              dob == null
+                  ? 'Date of Birth'
+                  : DateFormat('dd/MM/yyyy').format(dob),
+              style: TextStyle(color: dobColor, fontSize: 16.0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget submitWidgets() {
+    switch (_formType) {
+      case FormType.login:
+        return ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            PrimaryButton(
+              key: new Key('login'),
+              text: 'Login',
+              height: 44.0,
+              onPressed: validateAndSubmit,
+            ),
+            FlatButton(
+                key: new Key('need-account'),
+                child: Text("Create a New Account"),
+                onPressed: moveToRegister),
+          ],
+        );
+      default:
+        return ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            PrimaryButton(
+                key: new Key('register'),
+                text: 'Sign Up',
+                height: 44.0,
+                onPressed: () {
+                  if (dob == null) {
+                    validateAndSave();
+                    setState(() {
+                      dobColor = Colors.red[700];
+                    });
+                  } else {
+                    validateAndSubmit();
+                  }
+                }),
+            FlatButton(
+                key: new Key('need-login'),
+                child: Text("Already Have an Account ? Login"),
+                onPressed: moveToLogin),
+          ],
+        );
+    }
+  }
+
+  Widget _showCircularProgress() {
+    return Container(
+      padding: const EdgeInsets.all(20.0),
+      child: Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _showLogo() {
+    return Padding(
+        padding: EdgeInsets.only(top: 20.0),
+        child: Container(
+          height: 200,
+          width: 500,
+          child: Hero(
+            tag: 'hero',
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 70.0,
+                child: Image.asset('assets/login_logo.png'),
+              ),
+            ),
+          ),
+        ));
+  }
+
+  Widget hintText() {
+    return Container(
+        //height: 80.0,
+        padding: const EdgeInsets.all(32.0),
+        child: Text(_authHint,
+            key: new Key('hint'),
+            style: TextStyle(fontSize: 18.0, color: Colors.grey),
+            textAlign: TextAlign.center));
+  }
+
+  Widget _buildForm() {
+    return Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _showLogo(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _formType == FormType.register ? _buildNameField() : Container(),
+            _buildEmailField(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _buildPasswordField(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _formType == FormType.register
+                ? _builConfirmPasswordTextField()
+                : Container(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _formType == FormType.register ? _showDatePicker() : Container(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _isLoading != false ? submitWidgets() : _showCircularProgress()
+          ],
+        ));
+  }
+
+  Widget padded({Widget child}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: child,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return new Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: new AppBar(
-        backgroundColor: Colors.blueGrey[800],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.deepOrange,
         title: Center(
-          child: new Text('Mailman'),
-        ),
-        textTheme: TextTheme(
-          title: TextStyle(
-            fontFamily: "WorkSans-Bold",
-            fontWeight: FontWeight.bold,
-            color: Colors.blue,
-            fontSize: 40.0,
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 30.0,
+            ),
+            textAlign: TextAlign.center,
           ),
         ),
       ),
-      body: Center(
-        child: Stack(
-          alignment: Alignment(0.0, 0.0),
-          overflow: Overflow.visible,
-          children: <Widget>[
-            new Image.asset(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: <Widget>[
+          Center(
+            child: new Image.asset(
               'assets/envelop.png',
               width: size.width,
               height: size.height,
               fit: BoxFit.fill,
             ),
-            SingleChildScrollView(
-                child: Center(
-                  child: Stack(
-                      children: <Widget>[_showForm(), _showCircularProgress()]),
-                )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _showCircularProgress() {
-    if (_isLoading) {
-      return Center(child: SpinKitCircle(color: Colors.blue, size: 40.0));
-    }
-    return Container(
-      height: 0.0,
-      width: 0.0,
-    );
-  }
-
-//  void _showVerifyEmailSentDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content:
-//              new Text("Link to verify account has been sent to your email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                toggleFormMode();
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-  Widget _showForm() {
-    return new Card(
-      elevation: 5.0,
-      // color: Colors.blue[50],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Theme.Colors.loginGradientStart,
-              Theme.Colors.loginGradientEnd
-            ],
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Form(
-              key: _formKey,
-              child: new ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  showLogo(),
-                  showNameinput(),
-                  showEmailInput(),
-                  showPasswordInput(),
-                  showPrimaryButton(),
-                  showSecondaryButton(),
-                  showErrorMessage(),
-                ],
-              ),
+          SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(children: <Widget>[
+                Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                        elevation: 5.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        child: Container(
+                          padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Theme.Colors.loginGradientStart,
+                                Theme.Colors.loginGradientEnd
+                              ],
+                            ),
+                          ),
+                          child: _buildForm(),
+                        )),
+                  ),
+                ]),
+                hintText(),
+              ]),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
-        _errorMessage,
-        style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
-      );
-    } else {
-      return new Container(
-        height: 0.0,
-      );
-    }
-  }
-
-  Widget showLogo() {
-    return new Hero(
-      tag: 'hero',
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 48.0,
-          child: Image.asset('assets/login_logo.png'),
-        ),
-      ),
-    );
-  }
-  Widget showNameinput() {
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-      child: new TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(
-            fontFamily: "WorkSansSemiBold",
-            fontSize: 16.0,
-            color: Colors.black),
-        autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Full Names',
-            hintStyle:
-                TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-            icon: new Icon(
-              FontAwesomeIcons.envelope,
-              color: Colors.grey,
-            )),
-        validator: (value) => value.isEmpty ? 'Please Enter Your Full Names' : null,
-        onSaved: (value) => _name = value.trim(),
-      ),
-    );
-  }
-
-  Widget showEmailInput() {
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-      child: new TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(
-            fontFamily: "WorkSansSemiBold",
-            fontSize: 16.0,
-            color: Colors.black),
-        autofocus: false,
-        decoration: new InputDecoration(
-            hintText: 'Email',
-            hintStyle:
-                TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-            icon: new Icon(
-              FontAwesomeIcons.envelope,
-              color: Colors.grey,
-            )),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        onSaved: (value) => _email = value.trim(),
-      ),
-    );
-  }
-
-  Widget showPasswordInput() {
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-      child: new TextFormField(
-        maxLines: 1,
-        obscureText: true,
-        autofocus: false,
-        style: TextStyle(
-            fontFamily: "WorkSansSemiBold",
-            fontSize: 16.0,
-            color: Colors.black),
-        decoration: new InputDecoration(
-            hintText: 'Password',
-            hintStyle:
-                TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-            icon: new Icon(
-              Icons.lock,
-              color: Colors.grey,
-            )),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-        onSaved: (value) => _password = value.trim(),
-      ),
-    );
-  }
-
-  Widget showSecondaryButton() {
-    return new FlatButton(
-        child: new Text(
-            _isLoginForm ? 'Create an account' : 'Have an account? Sign in',
-            style: new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300)),
-        onPressed: toggleFormMode);
-  }
-
-  Widget showPrimaryButton() {
-    return new Padding(
-        padding:
-            EdgeInsets.only(top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-        child: SizedBox(
-          height: 40.0,
-          child: new RaisedButton(
-            elevation: 5.0,
-            shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
-            color: Colors.blue,
-            child: new Text(_isLoginForm ? 'Login' : 'Create account',
-                style: new TextStyle(fontSize: 20.0, color: Colors.white)),
-            onPressed: validateAndSubmit,
           ),
-        ));
+        ],
+      ),
+    );
   }
 }

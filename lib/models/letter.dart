@@ -19,6 +19,8 @@ class Letter {
     String status,
     String userId,
     String sDate,
+    String dPostalCode,
+    String sPostalCode,
   ) async {
     return await lettersCollection.document(userId).setData({
       'trackingNo': trackingNo,
@@ -27,6 +29,8 @@ class Letter {
       'dBox': dBox,
       'status': status,
       'sDate': sDate,
+      'dPostalCode' : dPostalCode,
+      'sPostalCode' : sPostalCode,
     });
   }
 
@@ -37,29 +41,19 @@ class Letter {
           description: doc.data["description"] ?? '',
           sBox: doc.data["sBox"] ?? '',
           dBox: doc.data["dBox"] ?? '',
-          status: doc.data["status"] ?? '', 
-          sDate: doc.data["sDate"] ?? '');
+          status: doc.data["status"] ?? '',
+          sDate: doc.data["sDate"] ?? '',
+          dPostalCode: doc.data["dPostalCode"] ?? '',
+          sPostalCode: doc.data["sPostalCode"] ?? '');
     }).toList();
   }
 
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(
-        userId: userId,
-        trackingNo: snapshot.data['trackingNo'],
-        description: snapshot.data["description"],
-        sBox: snapshot.data["sBox"],
-        dBox: snapshot.data["dBox"],
-        status: snapshot.data["status"],
-        sDate: snapshot.data["sDate"]);
-  }
-
   Stream<List<LetterDetails>> get letters {
-    return lettersCollection.where("sBox", isEqualTo: "gf").snapshots().map(_letterListFromSnapshot);
+    return lettersCollection
+        .snapshots()
+        .map(_letterListFromSnapshot);
   }
 
-  Stream<UserData> get userData{
-    return lettersCollection.document(userId).snapshots().map(_userDataFromSnapshot);
-  }
   // LetterDetails fromSnapshot(DataSnapshot snapshot) {}
   // Letter(this.trackingNo,this.description, this.sBox, this.userId, this.dBox);
 

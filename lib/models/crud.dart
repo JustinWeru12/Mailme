@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'package:mailman/services/authentication.dart';
 
 class CrudMethods {
   bool isLoggedIn() {
@@ -10,6 +11,23 @@ class CrudMethods {
       return false;
     }
   }
+
+  // Widget build(BuildContext context) {
+  //   String userId = 'userId';
+  //   return new StreamBuilder(
+  //       stream:
+  //           Firestore.instance.collection('user').document(userId).snapshots(),
+  //       builder: (context, snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return new Text("Loading");
+  //         }
+  //         var userDocument = snapshot.data;
+  //         myAddress = userDocument["address"];
+  //         myPcode =userDocument["postalCode"];
+  //         print(myAddress);
+  //         return new Text(userDocument["name"]);
+  //       });
+  // }
 
   Future<void> addData(profileData) async {
     if (isLoggedIn()) {
@@ -27,27 +45,63 @@ class CrudMethods {
     }
   }
 
-  getData() async{
-    return await Firestore.instance.collection('letters').where("status", isEqualTo: "Received").snapshots();
+  getData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        var userDocument = await Firestore.instance.collection('user').document(user.uid).get();
+        String _myAddress = userDocument["address"];
+        String _myPcode = userDocument["postalCode"];
+    return Firestore.instance.collection('letters').where("source Box", isEqualTo: _myAddress).snapshots();
   }
-  getProfile() async{
-    return await Firestore.instance.collection('profile').snapshots();
+   getRData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        var userDocument = await Firestore.instance.collection('user').document(user.uid).get();
+        String _myAddress = userDocument["address"];
+        String _myPcode = userDocument["postalCode"];
+    return Firestore.instance.collection('letters').where("destination Box", isEqualTo: _myAddress).snapshots();
   }
-  updateData(selectedDoc, newValues){
+
+  getProfile() async {
+    return Firestore.instance.collection('profile').snapshots();
+  }
+
+  getDataFromUserFromDocument() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return await Firestore.instance.collection('user').document(user.uid).get();
+  }
+
+  getDataFromUserFromDocumentWithID(userID) async {
+    return await Firestore.instance.collection('user').document(userID).get();
+  }
+
+  getDataFromUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return Firestore.instance.collection('user').document(user.uid).snapshots();
+  }
+
+  createOrUpdateUserData(Map<String, dynamic> userDataMap) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+//    print('USERID ' + user.uid);
+    DocumentReference ref =
+        Firestore.instance.collection('user').document(user.uid);
+    return ref.setData(userDataMap, merge: true);
+  }
+
+  updateData(selectedDoc, newValues) {
     Firestore.instance
         .collection('letters')
         .document(selectedDoc)
         .updateData(newValues)
-        .catchError((e){
+        .catchError((e) {
       print(e);
     });
   }
-  deleteData(docId){
+
+  deleteData(docId) {
     Firestore.instance
         .collection('letters')
         .document(docId)
         .delete()
-        .catchError((e){
+        .catchError((e) {
       print(e);
     });
   }

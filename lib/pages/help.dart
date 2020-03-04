@@ -44,7 +44,7 @@ class HelpPage extends StatelessWidget {
   Widget _buildFullName() {
     TextStyle _nameTextStyle = TextStyle(
       fontFamily: 'Roboto',
-      color: Colors.black,
+      color: Colors.white,
       fontSize: 28.0,
       fontWeight: FontWeight.w700,
     );

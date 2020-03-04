@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
         title: 'mailman',
-        // debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         theme: new ThemeData(
           primarySwatch: Colors.blue,
           brightness: Brightness.light
