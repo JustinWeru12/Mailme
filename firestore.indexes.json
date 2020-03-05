@@ -1,0 +1,41 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "letters",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "sBox",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dBox",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dPostalCode",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "sPostalCode",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "letters",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "sBox",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dBox",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

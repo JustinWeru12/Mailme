@@ -81,9 +81,7 @@ class _UserProfilState extends State<UserProfil> {
         _notificationValue = dataMap['notification'];
         myAddress = dataMap['address'];
         myPcode = dataMap['postalCode'];
-        print(myPcode);
-        print(myAddress);
-        print(userId);
+        
         Future<bool> saveData() async {
           SharedPreferences preferences = await SharedPreferences.getInstance();
           return await preferences.setString('myAddress', myAddress);
