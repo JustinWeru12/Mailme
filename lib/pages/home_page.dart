@@ -39,6 +39,9 @@ class _HomePageState extends State<HomePage>
   DateTime sDate;
   var letters;
   bool myAdmin;
+  var myAddress;
+  var myPcode;
+  var myPhone;
   CrudMethods crudObj = new CrudMethods();
 
   @override
@@ -53,6 +56,9 @@ class _HomePageState extends State<HomePage>
       Map<String, dynamic> dataMap = value.data;
       setState(() {
         myAdmin = dataMap['admin'];
+        myAddress = dataMap['address'];
+        myPcode = dataMap['postalCode'];
+        myPhone = dataMap['phone'];
       });
     });
     super.initState();
@@ -188,7 +194,15 @@ class _HomePageState extends State<HomePage>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    myAdmin == true ? _letterList() : Sent(),
+                    myAdmin == true
+                        ? Stack(
+                            children: <Widget>[
+                              myAddress == "" || myPcode == "" || myPhone == ""
+                                  ? _textBox()
+                                  : _letterList(),
+                            ],
+                          )
+                        : Sent(),
                     myAdmin == true ? LetterPage() : Mail(),
                     UserProfil(
                       onSignOut: () {},
@@ -202,6 +216,62 @@ class _HomePageState extends State<HomePage>
         ),
       ),
     );
+  }
+
+  Widget divider() {
+    return Divider(
+      color: Colors.blue,
+      height: 15,
+      indent: 20,
+      endIndent: 20,
+    );
+  }
+
+  Widget _textBox() {
+    return Center(
+        child: Card(
+      color: Colors.transparent,
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Container(
+        padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Theme.Colors.loginGradientStart,
+              Theme.Colors.loginGradientEnd
+            ],
+          ),
+        ),
+        child: Container(
+          height: 150.0,
+          width: 200.0,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                new SizedBox(
+                    height: 5.0,
+                  ),
+                Center(
+                  child: Text(
+                    "Please Complete \nYour Profile \nTo get informed \nas soon as you have mail",
+                    style: TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 20.0,
+                        color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                divider(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ));
   }
 
   Widget _letterList() {
@@ -255,13 +325,14 @@ class _HomePageState extends State<HomePage>
                                 'Dispatched') {
                               updateDialog(context,
                                   snapshot.data.documents[i].documentID);
-                            }
-                            else  if (snapshot.data.documents[i].data['status'] ==
+                            } else if (snapshot
+                                    .data.documents[i].data['status'] ==
                                 'Posted') {
                               updatDialog(context,
                                   snapshot.data.documents[i].documentID);
-                            }
-                            else updateTrigger(context, snapshot.data.documents[i].documentID);
+                            } else
+                              updateTrigger(context,
+                                  snapshot.data.documents[i].documentID);
                           },
                         ),
                       ));
@@ -497,7 +568,8 @@ class _HomePageState extends State<HomePage>
           );
         });
   }
-    Future<bool> updatDialog(BuildContext context, selectedDoc) async {
+
+  Future<bool> updatDialog(BuildContext context, selectedDoc) async {
     return showDialog(
         context: context,
         barrierDismissible: false,

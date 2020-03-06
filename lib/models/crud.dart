@@ -96,6 +96,11 @@ class CrudMethods {
         Firestore.instance.collection('user').document(user.uid);
     return ref.setData(userDataMap, merge: true);
   }
+    createOrUpdateAdminData(Map<String, dynamic> userDataMap) async {
+    DocumentReference ref =
+        Firestore.instance.collection('user').document();
+    return ref.setData(userDataMap, merge: true);
+  }
 
   updateData(selectedDoc, newValues) {
     Firestore.instance

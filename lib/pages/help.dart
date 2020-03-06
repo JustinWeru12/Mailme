@@ -1,13 +1,59 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
+import 'package:mailman/models/crud.dart';
+import 'package:mailman/style/theme.dart' as Theme;
 
-class HelpPage extends StatelessWidget {
+class HelpPage extends StatefulWidget {
+  @override
+  _HelpPageState createState() => _HelpPageState();
+}
+
+class _HelpPageState extends State<HelpPage> {
   final String _fullName = "Waweru Ndirangu";
+
+  final _formKey = GlobalKey<FormState>();
+
+
   final String _status = "Software Developer";
+
   final String _bio =
       "\"Hi, I am a Freelance developer working under Orion Industries. If you want to contact me or Get help about this product leave a message.\"";
+
   final String _followers = "177";
+
   final String _repositories = "4";
+  var email= TextEditingController();
+
   final String _scores = "450";
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  var userDocument = Firestore.instance.collection('letters').snapshots();
+
+  CrudMethods crudObj = new CrudMethods();
+
+  bool myAdmin;
+
+  // TextEditingController email = TextEditingController();
+   bool validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    crudObj.getDataFromUserFromDocument().then((value) {
+      Map<String, dynamic> dataMap = value.data;
+      setState(() {
+        myAdmin = dataMap['admin'];
+        print(myAdmin);
+      });
+    });
+    super.initState();
+  }
 
   Widget _buildCoverImage(Size screenSize) {
     return Container(
@@ -59,7 +105,7 @@ class HelpPage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme.Colors.loginGradientEnd,
         borderRadius: BorderRadius.circular(4.0),
       ),
       child: Text(
@@ -124,14 +170,14 @@ class HelpPage extends StatelessWidget {
   Widget _buildBio(BuildContext context) {
     TextStyle bioTextStyle = TextStyle(
       fontFamily: 'Spectral',
-      fontWeight: FontWeight.w400,//try changing weight to w500 if not thin
+      fontWeight: FontWeight.w400, //try changing weight to w500 if not thin
       fontStyle: FontStyle.italic,
       color: Color(0xFF799497),
       fontSize: 20.0,
     );
 
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      // color: Theme.Colors.loginGradientStart,
       padding: EdgeInsets.all(8.0),
       child: Text(
         _bio,
@@ -152,7 +198,7 @@ class HelpPage extends StatelessWidget {
 
   Widget _buildGetInTouch(BuildContext context) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      // color: Theme.Colors.loginGradientStart,
       padding: EdgeInsets.only(top: 8.0),
       child: Text(
         "Get in Touch with ${_fullName.split(" ")[0]},",
@@ -213,6 +259,105 @@ class HelpPage extends StatelessWidget {
     );
   }
 
+  Widget _adminButton() {
+    return Container(
+      width: 300.0,
+      child: RaisedButton(
+        onPressed: () {
+          addAdmin();
+        },
+        padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Text(
+              "ADD ADMIN",
+              style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16.0),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<bool> addAdmin() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.Colors.loginGradientStart,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32.0),
+            ),
+            title: Text(
+              'Enter the user\'s emai',
+              style: TextStyle(
+                  fontSize: 25.0,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.normal),
+              textAlign: TextAlign.center,
+            ),
+            content: Form(
+              child: TextFormField(
+                style: TextStyle(
+                    fontFamily: "WorkSansSemiBold",
+                    fontSize: 16.0,
+                    color: Colors.black),
+                autofocus: false,
+                decoration: new InputDecoration(
+                  labelText: 'Email',
+                  hintText: 'name@example@gmail.com',
+                  hintStyle: TextStyle(
+                      fontFamily: "WorkSansSemiLight",
+                      fontSize: 17.0,
+                      fontStyle: FontStyle.italic),
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(25.0),
+                    borderSide: new BorderSide(),
+                  ),
+                ),
+                validator: (value) {
+                  if (value.isEmpty ||
+                      !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                          .hasMatch(value)) {
+                    return 'Please Enter a Valid Email';
+                  }
+                  // email = value;
+                  print(email);
+                  return null;
+                },
+                controller: email,
+              ),
+            ),
+            actions: <Widget>[
+              RaisedButton(
+                elevation: 5.0,
+                padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: Text(
+                  'Add',
+                  style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                ),
+                textColor: Colors.red,
+                onPressed: () {
+                  print(email);
+                  if (_formKey.currentState.validate()) {
+                                  _formKey.currentState.save();
+                  crudObj.createOrUpdateAdminData({'admin': true}).where(
+                      "email",
+                      isEqualTo: this.email);
+                      print(email);
+                  Navigator.of(context).pop();}
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -235,6 +380,7 @@ class HelpPage extends StatelessWidget {
                   _buildGetInTouch(context),
                   SizedBox(height: 8.0),
                   _buildButtons(),
+                  myAdmin == true ? _adminButton() : Container(),
                 ],
               ),
             ),

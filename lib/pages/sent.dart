@@ -28,6 +28,9 @@ class _SentState extends State<Sent> {
   String status;
   DateTime sDate;
   var letters;
+  var myAddress;
+  var myPcode;
+  var myPhone;
 
   CrudMethods crudObj = new CrudMethods();
   @override
@@ -38,6 +41,14 @@ class _SentState extends State<Sent> {
       });
     });
     super.initState();
+    crudObj.getDataFromUserFromDocument().then((value) {
+      Map<String, dynamic> dataMap = value.data;
+      setState(() {
+        myAddress = dataMap['address'];
+        myPcode = dataMap['postalCode'];
+        myPhone = dataMap['phone'];
+      });
+    });
 
     @override
     signOut() async {
@@ -67,10 +78,71 @@ class _SentState extends State<Sent> {
             //   ),
             // ),
             Center(
-              child: _letterList(),
-            )
+                child: Stack(
+              children: <Widget>[
+                myAddress == "" || myPcode == "" || myPhone == ""
+                    ? _textBox()
+                    : _letterList(),
+              ],
+            ))
           ]),
         ));
+  }
+
+  Widget divider() {
+    return Divider(
+      color: Colors.blue,
+      height: 15,
+      indent: 20,
+      endIndent: 20,
+    );
+  }
+
+  Widget _textBox() {
+    return Center(
+        child: Card(
+      color: Colors.transparent,
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Container(
+        padding: EdgeInsets.only(left: 20.0, right: 10.0, top: 0.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Theme.Colors.loginGradientStart,
+              Theme.Colors.loginGradientEnd
+            ],
+          ),
+        ),
+        child: Container(
+          height: 150.0,
+          width: 200.0,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                new SizedBox(
+                    width: 5.0,
+                  ),
+                Center(
+                  child: Text(
+                    "Please Complete \nYour Profile \nTo get informed \nas soon as you have mail",
+                    style: TextStyle(
+                        fontFamily: "WorkSansSemiBold",
+                        fontSize: 20.0,
+                        color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                divider(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ));
   }
 
   Widget _letterList() {

@@ -14,13 +14,13 @@ class LetterPage extends StatefulWidget {
 }
 
 class _LetterPageState extends State<LetterPage> {
-  TextEditingController trackingNo = TextEditingController();
+  final trackingNo = TextEditingController();
   String status;
   TextEditingController sBox = TextEditingController();
   TextEditingController dBox = TextEditingController();
   String dPostalCode;
   DateTime sDate;
-  
+
   TextEditingController description = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
   // String _myActivityResult;
@@ -43,6 +43,15 @@ class _LetterPageState extends State<LetterPage> {
   //     });
   //   }
   // }
+  void dispose() {
+    trackingNo.dispose();
+    super.dispose();
+  }
+
+  void onButtonPressed() {
+    trackingNo.text = DateTime.now().toString();
+    print(trackingNo.text);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,58 +61,58 @@ class _LetterPageState extends State<LetterPage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              new RaisedButton(
-                elevation: 5.0,
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0)),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32.0),
-                        ),
-                        title: SelectableText(
-                          DateTime.now().millisecondsSinceEpoch.toString(),
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic),
-                          textAlign: TextAlign.justify,
-                        ),
-                        content: Text(
-                          '\n\nGenerated Successfully',
-                          textAlign: prefix0.TextAlign.center,
-                        ),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('Done'),
-                            textColor: Theme.Colors.loginGradientStart,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text(
-                  'GENERATE\nTRACKING-No',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Spectral',
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.normal),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                height: (30.0),
-              ),
+              // new RaisedButton(
+              //   elevation: 5.0,
+              //   shape: new RoundedRectangleBorder(
+              //       borderRadius: new BorderRadius.circular(10.0)),
+              //   onPressed: () {
+              //     showDialog(
+              //       context: context,
+              //       barrierDismissible: false,
+              //       builder: (BuildContext context) {
+              //         return AlertDialog(
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(32.0),
+              //           ),
+              //           title: SelectableText(
+              //             DateTime.now().millisecondsSinceEpoch.toString(),
+              //             style: TextStyle(
+              //                 fontSize: 20,
+              //                 fontFamily: 'Roboto',
+              //                 fontWeight: FontWeight.bold,
+              //                 fontStyle: FontStyle.italic),
+              //             textAlign: TextAlign.justify,
+              //           ),
+              //           content: Text(
+              //             '\n\nGenerated Successfully',
+              //             textAlign: prefix0.TextAlign.center,
+              //           ),
+              //           actions: <Widget>[
+              //             FlatButton(
+              //               child: Text('Done'),
+              //               textColor: Theme.Colors.loginGradientStart,
+              //               onPressed: () {
+              //                 Navigator.of(context).pop();
+              //               },
+              //             )
+              //           ],
+              //         );
+              //       },
+              //     );
+              //   },
+              //   child: const Text(
+              //     'GENERATE\nTRACKING-No',
+              //     style: TextStyle(
+              //         fontSize: 20,
+              //         fontFamily: 'Spectral',
+              //         fontWeight: FontWeight.bold,
+              //         fontStyle: FontStyle.normal),
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: (30.0),
+              // ),
               new Card(
                 elevation: 5.0,
                 shape: RoundedRectangleBorder(
@@ -130,40 +139,31 @@ class _LetterPageState extends State<LetterPage> {
                         SizedBox(
                           height: 25.0,
                         ),
-                        Text(
-                          "Add a New Letter",
+                        Text("Add a New Letter",
                           style: TextStyle(
                               fontSize: 30.0, fontFamily: 'WorkSansSemiBold'),
                         ),
                         SizedBox(
                           height: 25.0,
                         ),
-                        TextFormField(
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          autofocus: false,
-                          decoration: new InputDecoration(
-                            labelText: 'Tracking No.',
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                            icon: new Icon(
+                        Row(
+                          children: <Widget>[
+                            Icon(
                               FontAwesomeIcons.truck,
                               color: Colors.blue,
                             ),
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(),
+                          SizedBox( width: 20.0,),
+                            Center(
+                              child: Text(
+                                "The Tracking number will be generated \nautomatically when the details are entered correctly ",
+                                style: TextStyle(
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 16.0,
+                                    color: Colors.black),
+                                    textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please add the Tracking Number';
-                            }
-                            return null;
-                          },
-                          controller: trackingNo,
+                          ],
                         ),
                         SizedBox(
                           height: 25.0,
@@ -178,7 +178,9 @@ class _LetterPageState extends State<LetterPage> {
                             labelText: 'Description.',
                             hintText: 'Please add a Description',
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiLight", fontSize: 17.0, fontStyle: prefix0.FontStyle.italic),
+                                fontFamily: "WorkSansSemiLight",
+                                fontSize: 17.0,
+                                fontStyle: prefix0.FontStyle.italic),
                             icon: new Icon(
                               FontAwesomeIcons.solidCommentAlt,
                               color: Colors.blue,
@@ -189,7 +191,7 @@ class _LetterPageState extends State<LetterPage> {
                             ),
                           ),
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value.isEmpty||value.length < 6) {
                               return 'Please add a description';
                             }
                             return null;
@@ -209,7 +211,9 @@ class _LetterPageState extends State<LetterPage> {
                             labelText: 'Source Box.',
                             hintText: '123-10100',
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiLight", fontSize: 17.0, fontStyle: prefix0.FontStyle.italic),
+                                fontFamily: "WorkSansSemiLight",
+                                fontSize: 17.0,
+                                fontStyle: prefix0.FontStyle.italic),
                             icon: new Icon(
                               FontAwesomeIcons.box,
                               color: Colors.blue,
@@ -220,8 +224,8 @@ class _LetterPageState extends State<LetterPage> {
                             ),
                           ),
                           validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please add a Source address';
+                            if (value.isEmpty||!value.contains('-')||!RegExp(r"^[\d{1,7}\-\d{5}]").hasMatch(value)) {
+                              return 'Please add a valid source address';
                             }
                             return null;
                           },
@@ -240,7 +244,9 @@ class _LetterPageState extends State<LetterPage> {
                             labelText: 'Destination Box.',
                             hintText: '123-10100',
                             hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiLight", fontSize: 17.0, fontStyle: prefix0.FontStyle.italic),
+                                fontFamily: "WorkSansSemiLight",
+                                fontSize: 17.0,
+                                fontStyle: prefix0.FontStyle.italic),
                             icon: new Icon(
                               FontAwesomeIcons.boxOpen,
                               color: Colors.blue,
@@ -251,8 +257,8 @@ class _LetterPageState extends State<LetterPage> {
                             ),
                           ),
                           validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please add a destination address';
+                            if (value.isEmpty||!value.contains('-')||RegExp(r'^[a-zA-Z_\=@,\.;]+$').hasMatch(value)) {
+                              return 'Please add a valid destination address';
                             }
                             return null;
                           },
@@ -261,41 +267,11 @@ class _LetterPageState extends State<LetterPage> {
                         SizedBox(
                           height: 25.0,
                         ),
-                        // TextFormField(
-                        //   style: TextStyle(
-                        //       fontFamily: "WorkSansSemiBold",
-                        //       fontSize: 16.0,
-                        //       color: Colors.black),
-                        //   autofocus: false,
-                        //   decoration: new InputDecoration(
-                        //     labelText: 'Destination Postal Code.',
-                        //     hintStyle: TextStyle(
-                        //         fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                        //     icon: new Icon(
-                        //       FontAwesomeIcons.box,
-                        //       color: Colors.blue,
-                        //     ),
-                        //     border: new OutlineInputBorder(
-                        //       borderRadius: new BorderRadius.circular(25.0),
-                        //       borderSide: new BorderSide(),
-                        //     ),
-                        //   ),
-                        //   validator: (value) {
-                        //     if (value.isEmpty) {
-                        //       return 'Please add the destination postal code';
-                        //     }
-                        //     return null;
-                        //   },
-                        //   controller: dPostalCode,
-                        // ),
-                        // SizedBox(
-                        //   height: 25.0,
-                        // ),
                         Container(
                             padding: EdgeInsets.only(
                                 left: 45.0, right: 10.0, top: 0.0),
                             child: DropDownFormField(
-                              titleText: 'Select Postal Office',
+                              titleText: 'Select Destination Postal Office',
                               hintText: 'Please choose one',
                               validator: (value) {
                                 if (value == null) {
@@ -344,13 +320,14 @@ class _LetterPageState extends State<LetterPage> {
                             // Navigator.of(context).pop();
                             if (_formKey.currentState.validate()) {
                               crudObj.addLetter({
-                                'trackingNo': trackingNo.text.toString(),
+                                'trackingNo': DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString(),
                                 'description': description.text.toString(),
                                 'destination Box': dBox.text.toString(),
                                 'source Box': sBox.text.toString(),
                                 'status': 'Posted',
-                                'destination Postal Code':
-                                    this.dPostalCode,
+                                'destination Postal Code': this.dPostalCode,
                                 'sDate': DateTime.now().toString()
                               }).then((result) {
                                 dialogTrigger(context);
@@ -385,6 +362,7 @@ class _LetterPageState extends State<LetterPage> {
       ),
     );
   }
+  
 
   Future<bool> dialogTrigger(BuildContext context) async {
     return showDialog(
@@ -392,7 +370,7 @@ class _LetterPageState extends State<LetterPage> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-             backgroundColor: Theme.Colors.loginGradientStart,
+            backgroundColor: Theme.Colors.loginGradientStart,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32.0),
             ),
@@ -408,7 +386,8 @@ class _LetterPageState extends State<LetterPage> {
                 child: Text('Done'),
                 textColor: Colors.black,
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacementNamed('/');
+
                   return new HomePage();
                 },
               )
