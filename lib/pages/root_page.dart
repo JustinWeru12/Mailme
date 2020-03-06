@@ -21,7 +21,7 @@ class RootPage extends StatefulWidget {
 
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  String _userId;
+  String _userId = "";
   CrudMethods crudObj = new CrudMethods();
 
   @override
@@ -31,6 +31,7 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         if (user != null) {
           _userId = user?.uid;
+         
         }
         authStatus =
             user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
@@ -42,11 +43,12 @@ class _RootPageState extends State<RootPage> {
     widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
-      });
+              });
     });
     setState(() {
       crudObj.getDataFromUserFromDocument().then((value) {
         authStatus = AuthStatus.LOGGED_IN;
+        Navigator.of(context).pushReplacementNamed('/');
       });
     });
   }

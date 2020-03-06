@@ -1,3 +1,4 @@
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:mailman/services/authentication.dart';
 import 'package:mailman/models/crud.dart';
@@ -468,13 +469,47 @@ class _UserProfilState extends State<UserProfil> {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              validator: validatePostalCode,
-                              decoration:
-                                  InputDecoration(hintText: 'Postal Code'),
-                              keyboardType: TextInputType.number,
-                              onSaved: (value) => _postalCode = value,
-                            ),
+                            child: Container(
+                            padding: EdgeInsets.only(
+                                left: 10.0, right: 10.0, top: 0.0),
+                            child: DropDownFormField(
+                              titleText: 'Select Postal Office',
+                              hintText: 'Please choose one',
+                              validator: (value) {
+                                if (value == null) {
+                                  return "Select the Postal Code";
+                                }
+                                return null;
+                              },
+                              value: _postalCode,
+                              onSaved: (value) {
+                                setState(() {
+                                  _postalCode = value;
+                                });
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  _postalCode = value;
+                                });
+                              },
+                              dataSource: [
+                                {
+                                  "display": "10100",
+                                  "value": "10100",
+                                },
+                                {
+                                  "display": "10101",
+                                  "value": "10101",
+                                },
+                                {
+                                  "display": "10102",
+                                  "value": "10102",
+                                },
+                                {"display": "10103", "value": "10103"}
+                              ],
+                              textField: 'display',
+                              valueField: 'value',
+                            )),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -491,7 +526,7 @@ class _UserProfilState extends State<UserProfil> {
                                 if (_formKey.currentState.validate()) {
                                   _formKey.currentState.save();
                                   crudObj.createOrUpdateUserData(
-                                      {'postalCode': _postalCode});
+                                      {'postalCode': this._postalCode});
                                   Navigator.pop(context);
                                 }
                               },

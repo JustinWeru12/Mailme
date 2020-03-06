@@ -8,17 +8,17 @@ import 'package:mailman/style/theme.dart' as Theme;
 import 'package:provider/provider.dart';
 import 'package:mailman/models/crud.dart';
 
-class Mail extends StatefulWidget {
-  Mail({Key key, this.auth, this.userId, this.logoutCallback})
+class Sent extends StatefulWidget {
+  Sent({Key key, this.auth, this.userId, this.logoutCallback})
       : super(key: key);
   final BaseAuth auth;
   final logoutCallback;
   final String userId;
   @override
-  _MailState createState() => _MailState();
+  _SentState createState() => _SentState();
 }
 
-class _MailState extends State<Mail> {
+class _SentState extends State<Sent> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String trackingNo;
@@ -32,7 +32,7 @@ class _MailState extends State<Mail> {
   CrudMethods crudObj = new CrudMethods();
   @override
   void initState() {
-    crudObj.getRData().then((results) {
+    crudObj.getSData().then((results) {
       setState(() {
         letters = results;
       });

@@ -31,6 +31,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
   String _fullNames;
   DateTime dob;
   File picture;
+  bool admin;
   // String _address;
   // String _postalCode;
   String _authHint = '';
@@ -73,6 +74,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
             address: "",
             postalCode: "",
             dob: dob,
+            admin: false,
           );
           crudObj.createOrUpdateUserData(userData.getDataMap());
         }

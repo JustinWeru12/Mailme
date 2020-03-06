@@ -44,8 +44,19 @@ class CrudMethods {
       });
     }
   }
-
+  getAdmin() async{
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        var userDocument = await Firestore.instance.collection('user').document(user.uid).get();
+        bool _myAdmin = userDocument["admin"];
+  }
   getData() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        var userDocument = await Firestore.instance.collection('user').document(user.uid).get();
+        String _myAddress = userDocument["address"];
+        String _myPcode = userDocument["postalCode"];
+    return Firestore.instance.collection('letters').where("destination Postal Code", isEqualTo: _myPcode).snapshots();
+  }
+   getSData() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
         var userDocument = await Firestore.instance.collection('user').document(user.uid).get();
         String _myAddress = userDocument["address"];

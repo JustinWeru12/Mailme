@@ -14,8 +14,8 @@ class UserData{
   final String address;
   final String postalCode;
   final DateTime dob;
-
-  UserData({this.userId, this.fullNames, this.email, this.phone, this.address, this.postalCode, this.dob, this.picture});
+  final bool admin;
+  UserData({this.userId, this.fullNames, this.email, this.phone, this.address, this.postalCode, this.dob, this.picture, this.admin});
 
 Map<String,dynamic> getDataMap(){
     return {
@@ -26,7 +26,8 @@ Map<String,dynamic> getDataMap(){
       "address": address,
       "postalCode": postalCode,
       "picture": picture,
-      "dob": dob
+      "dob": dob,
+      "admin": admin
     };
   }
 }
