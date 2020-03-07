@@ -122,7 +122,7 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
 
   Widget _buildEmailField() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
       child: TextFormField(
         maxLines: 1,
         key: new Key('email'),
@@ -361,7 +361,10 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
             SizedBox(
               height: 10.0,
             ),
-            _formType == FormType.register ? _buildNameField() : Container(),
+            _formType == FormType.register ? _buildNameField() : Container( height:0.0),
+            SizedBox(
+              height: 10.0,
+            ),
             _buildEmailField(),
             SizedBox(
               height: 10.0,

@@ -152,7 +152,7 @@ class _LetterPageState extends State<LetterPage> {
                               FontAwesomeIcons.truck,
                               color: Colors.blue,
                             ),
-                          SizedBox( width: 20.0,),
+                          SizedBox( width: 40.0,),
                             Center(
                               child: Text(
                                 "The Tracking number will be generated \nautomatically when the details are entered correctly ",
@@ -224,7 +224,7 @@ class _LetterPageState extends State<LetterPage> {
                             ),
                           ),
                           validator: (value) {
-                            if (value.isEmpty||!value.contains('-')||!RegExp(r"^[\d{1,7}\-\d{5}]").hasMatch(value)) {
+                            if (value.isEmpty||!value.contains('-')||RegExp(r"^[a-zA-Z]+$").hasMatch(value)) {
                               return 'Please add a valid source address';
                             }
                             return null;
