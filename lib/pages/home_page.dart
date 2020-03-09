@@ -338,13 +338,6 @@ class _HomePageState extends State<HomePage>
                       ));
                 },
               );
-            } else if (snapshot.data.documents.length == 0) {
-              return Center(
-                  child: Text(
-                "Welcome. Your list is Empty. Please Hold on and Send Mail...",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30.0),
-              ));
             } else {
               return Center(
                   child: Text(

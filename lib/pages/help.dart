@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/models/crud.dart';
 import 'package:mailman/style/theme.dart' as Theme;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
