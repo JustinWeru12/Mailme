@@ -144,8 +144,8 @@ class _UserProfilState extends State<UserProfil> {
   }
 
   String validateAddress(String value) {
-    if ((value.length < 7) ||!value.contains('-')||RegExp(r'^[a-zA-Z_\=@,\.;]+$').hasMatch(value))
-      return 'Enter a valid Address in the form 123..-98765';
+    if ((value.length < 7) ||!value.contains('-')||!RegExp(r"^\d{1,4}(?:[-\s]\d{5})?$").hasMatch(value))
+      return 'Enter a valid Address in the form 123-98765';
     else
       return null;
   }
@@ -317,6 +317,7 @@ class _UserProfilState extends State<UserProfil> {
                             padding: EdgeInsets.all(8.0),
                             child: TextFormField(
                               decoration: InputDecoration(hintText: 'Phone No'),
+                              keyboardType: TextInputType.number,
                               onSaved: (value) => _phone = value,
                             ),
                           ),

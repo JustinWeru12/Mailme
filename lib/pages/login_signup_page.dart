@@ -70,7 +70,8 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
             fullNames: _fullNames,
             email: _email,
             phone: "",
-            picture: "https://firebasestorage.googleapis.com/v0/b/lynight-53310.appspot.com/o/profilePics%2Fbloon_pics.jpg?alt=media&token=ab6c1537-9b1c-4cb4-b9d6-2e5fa9c7cb46",
+            picture:
+                "https://firebasestorage.googleapis.com/v0/b/lynight-53310.appspot.com/o/profilePics%2Fbloon_pics.jpg?alt=media&token=ab6c1537-9b1c-4cb4-b9d6-2e5fa9c7cb46",
             address: "",
             postalCode: "",
             dob: dob,
@@ -361,7 +362,9 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
             SizedBox(
               height: 10.0,
             ),
-            _formType == FormType.register ? _buildNameField() : Container( height:0.0),
+            _formType == FormType.register
+                ? _buildNameField()
+                : Container(height: 0.0),
             SizedBox(
               height: 10.0,
             ),
@@ -425,35 +428,37 @@ class _LoginSignUpPageState extends State<LoginSignUpPage>
             ),
           ),
           SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(children: <Widget>[
-                Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Card(
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: Container(
-                          padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            gradient: LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [
-                                Theme.Colors.loginGradientStart,
-                                Theme.Colors.loginGradientEnd
-                              ],
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(children: <Widget>[
+                  Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Card(
+                          elevation: 5.0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: Container(
+                            padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              gradient: LinearGradient(
+                                begin: Alignment.topRight,
+                                end: Alignment.bottomLeft,
+                                colors: [
+                                  Theme.Colors.loginGradientStart,
+                                  Theme.Colors.loginGradientEnd
+                                ],
+                              ),
                             ),
-                          ),
-                          child: _buildForm(),
-                        )),
-                  ),
+                            child: _buildForm(),
+                          )),
+                    ),
+                  ]),
+                  hintText(),
                 ]),
-                hintText(),
-              ]),
+              ),
             ),
           ),
         ],

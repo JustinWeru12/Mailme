@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:mailman/models/crud.dart';
 import 'package:mailman/style/theme.dart' as Theme;
+import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HelpPage extends StatefulWidget {
   @override
@@ -14,7 +18,6 @@ class _HelpPageState extends State<HelpPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-
   final String _status = "Software Developer";
 
   final String _bio =
@@ -22,19 +25,61 @@ class _HelpPageState extends State<HelpPage> {
 
   final String _followers = "177";
 
+  String attachment;
+
+  final _subjectController = TextEditingController(text: 'The subject');
+
+  final _bodyController = TextEditingController(
+    text: 'Mail body.',
+  );
   final String _repositories = "4";
-  var email= TextEditingController();
+  var email = TextEditingController();
 
   final String _scores = "450";
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  var userDocument = Firestore.instance.collection('letters').snapshots();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Future<void> send() async {
+    final Email email = Email(
+      body: _bodyController.text,
+      subject: _subjectController.text,
+      recipients: ['justinivor20@gmail.com'],
+      attachmentPath: attachment,
+    );
+    String platformResponse;
+
+    try {
+      await FlutterEmailSender.send(email);
+      platformResponse = 'success';
+    } catch (error) {
+      platformResponse = error.toString();
+    }
+
+    if (!mounted) return;
+
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(platformResponse),
+    ));
+  }
+
+  updateAdmin(selectedDoc, newValues) {
+    Firestore.instance
+        .collection('user')
+        .document(selectedDoc)
+        .updateData(newValues)
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  var userDocument = Firestore.instance.collection('user').snapshots();
 
   CrudMethods crudObj = new CrudMethods();
 
   bool myAdmin;
 
   // TextEditingController email = TextEditingController();
-   bool validateAndSave() {
+  bool validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
@@ -236,7 +281,9 @@ class _HelpPageState extends State<HelpPage> {
           SizedBox(width: 10.0),
           Expanded(
             child: InkWell(
-              onTap: () => print("Message"),
+              onTap: () {
+                emailSender();
+              },
               child: Container(
                 height: 40.0,
                 decoration: BoxDecoration(
@@ -272,7 +319,7 @@ class _HelpPageState extends State<HelpPage> {
             padding: EdgeInsets.all(10.0),
             child: Text(
               "ADD ADMIN",
-              style: TextStyle(fontWeight: FontWeight.w600,fontSize: 16.0),
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
             ),
           ),
         ),
@@ -323,10 +370,10 @@ class _HelpPageState extends State<HelpPage> {
                       !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
                           .hasMatch(value)) {
                     return 'Please Enter a Valid Email';
+                  } else {
+                    
+                    return null; // print(_email);
                   }
-                  // email = value;
-                  print(email);
-                  return null;
                 },
                 controller: email,
               ),
@@ -343,19 +390,121 @@ class _HelpPageState extends State<HelpPage> {
                 ),
                 textColor: Colors.red,
                 onPressed: () {
-                  print(email);
-                  if (_formKey.currentState.validate()) {
-                                  _formKey.currentState.save();
-                  crudObj.createOrUpdateAdminData({'admin': true}).where(
-                      "email",
-                      isEqualTo: this.email);
-                      print(email);
-                  Navigator.of(context).pop();}
+                  String _email = email.text.toString();
+                  Firestore.instance
+                      .collection('user')
+                      .where('email', isEqualTo: _email)
+                      .getDocuments()
+                      .then((querySnapshot) {
+                    querySnapshot.documents.forEach((documentSnapshot) {
+                      documentSnapshot.reference.updateData({'admin': true});
+                    });
+                  });
+                  Navigator.of(context).pop();
+                  print(_email);
                 },
               )
             ],
           );
         });
+  }
+
+  Future<bool> emailSender() async {
+    final Widget imagePath = Text(attachment ?? '');
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.Colors.loginGradientStart,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: Text(
+              'Contact the Developer',
+              style: TextStyle(
+                  fontSize: 25.0,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.normal,
+                  fontStyle: FontStyle.normal),
+              textAlign: TextAlign.center,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(
+                  width: 400.0,
+                ),
+                Container(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _subjectController,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Subject',
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _bodyController,
+                              maxLines: 10,
+                              decoration: InputDecoration(
+                                  labelText: 'Body',
+                                  border: OutlineInputBorder()),
+                            ),
+                          ),
+                          imagePath,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                FloatingActionButton.extended(
+                  icon: Icon(Icons.camera),
+                  label: Text('Add Image'),
+                  onPressed: _openImagePicker,
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              RaisedButton(
+                  elevation: 5.0,
+                  padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'Send',
+                        style: TextStyle(
+                            fontSize: 15.0, fontWeight: FontWeight.bold),
+                      ),
+                      Icon(Icons.send),
+                    ],
+                  ),
+                  textColor: Colors.red,
+                  onPressed: send)
+            ],
+          );
+        });
+  }
+
+  void _openImagePicker() async {
+    File pick = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      attachment = pick.path;
+    });
   }
 
   @override

@@ -253,8 +253,8 @@ class _HomePageState extends State<HomePage>
             child: Column(
               children: <Widget>[
                 new SizedBox(
-                    height: 5.0,
-                  ),
+                  height: 5.0,
+                ),
                 Center(
                   child: Text(
                     "Please Complete \nYour Profile \nTo get informed \nas soon as you have mail",
@@ -338,6 +338,13 @@ class _HomePageState extends State<HomePage>
                       ));
                 },
               );
+            } else if (snapshot.data.documents.length == 0) {
+              return Center(
+                  child: Text(
+                "Welcome. Your list is Empty. Please Hold on and Send Mail...",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30.0),
+              ));
             } else {
               return Center(
                   child: Text(

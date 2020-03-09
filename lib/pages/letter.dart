@@ -176,7 +176,7 @@ class _LetterPageState extends State<LetterPage> {
                           autofocus: false,
                           decoration: new InputDecoration(
                             labelText: 'Description.',
-                            hintText: 'Please add a Description',
+                            hintText: 'Please add a Description e.g Parcel/Letter/etc...',
                             hintStyle: TextStyle(
                                 fontFamily: "WorkSansSemiLight",
                                 fontSize: 17.0,
@@ -224,7 +224,7 @@ class _LetterPageState extends State<LetterPage> {
                             ),
                           ),
                           validator: (value) {
-                            if (value.isEmpty||!value.contains('-')||RegExp(r"^[a-zA-Z]+$").hasMatch(value)) {
+                            if (value.isEmpty||!value.contains('-')||!RegExp(r"^\d{1,4}(?:[-\s]\d{5})?$").hasMatch(value)) {
                               return 'Please add a valid source address';
                             }
                             return null;
@@ -257,7 +257,7 @@ class _LetterPageState extends State<LetterPage> {
                             ),
                           ),
                           validator: (value) {
-                            if (value.isEmpty||!value.contains('-')||RegExp(r'^[a-zA-Z_\=@,\.;]+$').hasMatch(value)) {
+                            if (value.isEmpty||!value.contains('-')||!RegExp(r"^\d{1,4}(?:[-\s]\d{5})?$").hasMatch(value)) {
                               return 'Please add a valid destination address';
                             }
                             return null;
@@ -359,7 +359,7 @@ class _LetterPageState extends State<LetterPage> {
             ],
           ),
         ),
-      ),
+      ), value: null,
     );
   }
   
