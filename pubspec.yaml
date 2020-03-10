@@ -9,6 +9,8 @@ dependencies:
   cloud_firestore: ^0.13.1
   firebase_core: ^0.4.1+4
   google_sign_in: ^4.0.4
+  # flutter_facebook_login: ^3.0.0
+  flutter_signin_button: ^1.0.0
   apple_sign_in: ^0.1.0
   provider: ^4.0.3
   get_it: ^3.0.3
@@ -33,7 +35,7 @@ dependencies:
   # device_info: ^0.4.1+4
   google_fonts: ^0.3.2
   flutter_launcher_icons: ^0.6.1
-  shared_preferences: ^0.5.6+1
+  # shared_preferences: ^0.5.6+1
   firebase_messaging: ^5.0.2
   image: ^2.1.12
 dependency_overrides:
@@ -45,7 +47,6 @@ dev_dependencies:
   font_awesome_flutter: ^8.0.1
 
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -81,6 +82,6 @@ flutter:
         - asset: assets/fonts/Roboto/Roboto-Bold.ttf
           weight: 700
 flutter_icons:
-  image_path: "assets/icon/icon.png" 
+  image_path: "assets/icon/icon.png"
   android: true
   ios: true

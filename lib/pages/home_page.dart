@@ -338,6 +338,17 @@ class _HomePageState extends State<HomePage>
                       ));
                 },
               );
+            } else if (snapshot.data.documents.length == 0) {
+              Center(
+                child: Text(
+                  "Please Complete \nYour Profile \nTo get informed \nas soon as you have mail",
+                  style: TextStyle(
+                      fontFamily: "WorkSansSemiBold",
+                      fontSize: 20.0,
+                      color: Colors.black),
+                  textAlign: TextAlign.center,
+                ),
+              );
             } else {
               return Center(
                   child: Text(
@@ -411,7 +422,7 @@ class _HomePageState extends State<HomePage>
               borderRadius: BorderRadius.circular(32.0),
             ),
             title: Text(
-              'The record can only be \nConfirmed or Modified by\nthe Admin if it has not\n been Received or Confirmed.',
+              'The record can only be \n Modified by\nthe Admin if it has not\n been Received or Confirmed.',
               style: TextStyle(
                   fontSize: 20.0,
                   fontFamily: 'Roboto',

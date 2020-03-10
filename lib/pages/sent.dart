@@ -68,14 +68,35 @@ class _SentState extends State<Sent> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: prefix0.Stack(children: <Widget>[
-            // Center(
-            //   child: new Image.asset(
-            //     'assets/envelop.png',
-            //     width: size.width,
-            //     height: size.height,
-            //     fit: BoxFit.fill,
-            //   ),
-            // ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: size.width,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft:  const  Radius.circular(20.0),
+                    topRight: const  Radius.circular(20.0),
+                  ),
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Theme.Colors.loginGradientStart,
+                      Theme.Colors.loginGradientEnd
+                    ],
+                  ),
+                ),
+                child: Text(
+                  "Welcome, This is the Outbox Window ",
+                  style: TextStyle(
+                      fontSize: 30.0,
+                      color: Colors.black,
+                      fontFamily: "Roboto",
+                      fontWeight: FontWeight.normal),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
             Center(
                 child: Stack(
               children: <Widget>[
@@ -123,8 +144,8 @@ class _SentState extends State<Sent> {
             child: Column(
               children: <Widget>[
                 new SizedBox(
-                    width: 5.0,
-                  ),
+                  width: 5.0,
+                ),
                 Center(
                   child: Text(
                     "Please Complete \nYour Profile \nTo get informed \nas soon as you have mail",

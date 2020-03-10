@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:mailman/models/selectProfilPicture.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mailman/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfil extends StatefulWidget {
   UserProfil({@required this.onSignOut, this.myAddress, this.myPcode});
@@ -82,24 +81,6 @@ class _UserProfilState extends State<UserProfil> {
         _notificationValue = dataMap['notification'];
         myAddress = dataMap['address'];
         myPcode = dataMap['postalCode'];
-        
-        Future<bool> saveData() async {
-          SharedPreferences preferences = await SharedPreferences.getInstance();
-          return await preferences.setString('myAddress', myAddress);
-        }
-
-        Future<String> loadData() async {
-          SharedPreferences preferences = await SharedPreferences.getInstance();
-          return preferences.getString('myAddress');
-        }
-
-        setData() {
-          loadData().then((value) {
-            setState(() {
-              data = value;
-            });
-          });
-        }
       });
     });
   }
@@ -144,7 +125,9 @@ class _UserProfilState extends State<UserProfil> {
   }
 
   String validateAddress(String value) {
-    if ((value.length < 7) ||!value.contains('-')||!RegExp(r"^\d{1,4}(?:[-\s]\d{5})?$").hasMatch(value))
+    if ((value.length < 7) ||
+        !value.contains('-') ||
+        !RegExp(r"^\d{1,4}(?:[-\s]\d{5})?$").hasMatch(value))
       return 'Enter a valid Address in the form 123-98765';
     else
       return null;
@@ -471,46 +454,46 @@ class _UserProfilState extends State<UserProfil> {
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Container(
-                            padding: EdgeInsets.only(
-                                left: 10.0, right: 10.0, top: 0.0),
-                            child: DropDownFormField(
-                              titleText: 'Select Postal Office',
-                              hintText: 'Please choose one',
-                              validator: (value) {
-                                if (value == null) {
-                                  return "Select the Postal Code";
-                                }
-                                return null;
-                              },
-                              value: _postalCode,
-                              onSaved: (value) {
-                                setState(() {
-                                  _postalCode = value;
-                                });
-                              },
-                              onChanged: (value) {
-                                setState(() {
-                                  _postalCode = value;
-                                });
-                              },
-                              dataSource: [
-                                {
-                                  "display": "10100",
-                                  "value": "10100",
-                                },
-                                {
-                                  "display": "10101",
-                                  "value": "10101",
-                                },
-                                {
-                                  "display": "10102",
-                                  "value": "10102",
-                                },
-                                {"display": "10103", "value": "10103"}
-                              ],
-                              textField: 'display',
-                              valueField: 'value',
-                            )),
+                                padding: EdgeInsets.only(
+                                    left: 10.0, right: 10.0, top: 0.0),
+                                child: DropDownFormField(
+                                  titleText: 'Select Postal Office',
+                                  hintText: 'Please choose one',
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Select the Postal Code";
+                                    }
+                                    return null;
+                                  },
+                                  value: _postalCode,
+                                  onSaved: (value) {
+                                    setState(() {
+                                      _postalCode = value;
+                                    });
+                                  },
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _postalCode = value;
+                                    });
+                                  },
+                                  dataSource: [
+                                    {
+                                      "display": "10100",
+                                      "value": "10100",
+                                    },
+                                    {
+                                      "display": "10101",
+                                      "value": "10101",
+                                    },
+                                    {
+                                      "display": "10102",
+                                      "value": "10102",
+                                    },
+                                    {"display": "10103", "value": "10103"}
+                                  ],
+                                  textField: 'display',
+                                  valueField: 'value',
+                                )),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
